@@ -1,5 +1,5 @@
 import { CrossWord, BoolGrid, Clue } from "../data/types"
-import { AnswerLength } from "../services/AnswerLength";
+import { answerLength } from "../services/answerLength";
 
 
 type TileProps = {
@@ -62,7 +62,7 @@ const ClueColumn = ({ clues }: { clues: Clue[] }): JSX.Element => {
             <div>Clue 1 - This is a beautiful column of clues</div>
             <div> it looks something like this... </div>
             {clues.map((clue, index) => (
-                <div key={index}>{clue.hint} ({AnswerLength(clue.answer)})</div>
+                <div key={index}>{clue.hint} ({answerLength(clue.answer)})</div>
             ))}
         </>
     )

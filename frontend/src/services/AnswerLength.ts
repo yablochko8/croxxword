@@ -1,4 +1,4 @@
-export const AnswerLength = (answer: string): string => {
+export const answerLength = (answer: string): string => {
   console.log(answer);
   // takes a string and returns the length of the string
   // if the string is "Paris" it returns "5"

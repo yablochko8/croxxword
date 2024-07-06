@@ -1,7 +1,9 @@
 import { useState } from "react";
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
-import { exampleCrossWord } from "./data/examples";
+import { exampleCrossWord, exampleGuess } from "./data/examples";
+import { AlphaGrid, Evaluation } from "./data/types";
+import { expandEvaluation } from "./services/expandEvaluation";
 
 export const PORT = 4101; // change this to an import before doing anything serious
 
@@ -38,35 +40,25 @@ const postDataAndDisplayResponse = async (
 };
 
 function App() {
-  const [submittedValue, setSubmittedValue] = useState("");
-  const [valuesFromServer, setValuesFromServer] = useState(["starting data"]);
+  const [guessGrid, setGuessGrid] = useState<AlphaGrid>(exampleGuess);
+  const [guessEvaluation, setGuessEvaluation] = useState<Evaluation | null>(null);
 
   return (
     <>
       <ShowCrossword cw={exampleCrossWord} />
-      <button onClick={() => getData()}>Call the GET Endpoint</button>
       <br />
-      <br />
-
-      <div>Enter text here:</div>
-      <input
-        type="text"
-        value={submittedValue}
-        onChange={(e) => {
-          setSubmittedValue(e.target.value);
-        }}
-      />
       <br />
       <button
         onClick={() =>
-          postDataAndDisplayResponse(submittedValue, setValuesFromServer)
+          postDataAndDisplayResponse("guessGrid", setGuessEvaluation)
         }
       >
-        Call the POST Endpoint
+        Check Answers
       </button>
-      {valuesFromServer.map((value, index) => {
-        return <div key={index}>{value}</div>;
-      })}
+      <br />
+      {(guessEvaluation) ? expandEvaluation(guessEvaluation) : null}
+      <br />
+      <button onClick={() => getData()}>Call the GET Endpoint</button>
     </>
   );
 }

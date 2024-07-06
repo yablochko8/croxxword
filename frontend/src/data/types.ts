@@ -16,3 +16,10 @@ export type CrossWord = {
   tiles: BoolGrid;
   answers: AlphaGrid;
 };
+
+export type Evaluation = {
+  correctWords: number;
+  wrongWords: number;
+  correctLetters: number;
+  wrongLetters: number;
+};
