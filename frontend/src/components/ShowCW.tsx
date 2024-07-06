@@ -15,6 +15,7 @@ type TileProps = {
  */
 const Tile = (props: TileProps): JSX.Element => {
 
+    console.log(props)
     //
     // add logic here
     //

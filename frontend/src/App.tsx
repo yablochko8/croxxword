@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./App.css";
+import { ShowCrossword } from "./components/ShowCW";
+import { exampleCrossWord } from "./data/examples";
 
 export const PORT = 4101; // change this to an import before doing anything serious
 
@@ -41,6 +43,7 @@ function App() {
 
   return (
     <>
+      <ShowCrossword cw={exampleCrossWord} />
       <button onClick={() => getData()}>Call the GET Endpoint</button>
       <br />
       <br />
