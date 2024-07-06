@@ -13,8 +13,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Person {
+model Clue {
   id        Int       @id @default(autoincrement())
+  hint      String
+  answer    String
   name      String    @unique
   nickname  String?
   createdAt DateTime  @default(now())
@@ -38,7 +40,7 @@ model Thing {
   personId Int
 
   // relationships
-  person Person @relation(fields: [personId], references: [id])
+  clue Clue @relation(fields: [personId], references: [id])
 
   @@map("thing")
 }
