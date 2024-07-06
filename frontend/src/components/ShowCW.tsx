@@ -1,4 +1,4 @@
-import { CrossWord, BoolGrid, Clue } from "../data/types"
+import { CrossWord, BoolGrid, Clue, AlphaGrid } from "../data/types"
 import { answerLength } from "../services/answerLength";
 
 
@@ -75,9 +75,11 @@ const ClueColumn = ({ clues }: { clues: Clue[] }): JSX.Element => {
  * - submit button
  * @returns JSX.Element
  */
-export const ShowCrossword = ({ cw }: { cw: CrossWord }): JSX.Element => {
+export const ShowCrossword = ({ cw, gg, setGG }: { cw: CrossWord, gg: AlphaGrid, setGG: Function }): JSX.Element => {
 
     console.log(cw.clues)
+    console.log(gg)
+    console.log(setGG)
 
     //
     // add logic here
