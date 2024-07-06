@@ -11,7 +11,7 @@ export type Clue = {
   author: string;
 };
 
-export type ClueGrid = {
+export type CrossWord = {
   clues: Clue[];
   tiles: BoolGrid;
   answers: AlphaGrid;

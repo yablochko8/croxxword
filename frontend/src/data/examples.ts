@@ -1,4 +1,4 @@
-import { AlphaGrid, Clue, ClueGrid } from "./types";
+import { AlphaGrid, Clue, CrossWord } from "./types";
 
 const exampleClue1: Clue = {
   hint: "Train dear is soft on the soles",
@@ -27,7 +27,7 @@ const exampleClue3: Clue = {
   author: "alice18103845",
 };
 
-export const exampleClueGrid: ClueGrid = {
+export const exampleClueGrid: CrossWord = {
   clues: [exampleClue1, exampleClue2, exampleClue3],
   tiles: [
     [false, true, true, true, true, true, true, true],
