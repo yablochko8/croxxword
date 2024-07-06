@@ -1,5 +1,5 @@
 import { CrossWord, BoolGrid, Clue } from "../data/types"
-import { answerLength } from "../services/BooomnswerLength";
+import { answerLength } from "../services/answerLength";
 
 
 type TileProps = {
