@@ -1,0 +1,44 @@
+{
+  "name": "croxxword",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test:env": "npx dotenv -e .env.test vitest",
+    "test:server:up": "pm2 start 'bun server/server.ts' --name testserver",
+    "test:server:down": "pm2 delete testserver",
+    "test:prisma:migrate": "npx prisma migrate dev --name initial-setup --force",
+    "test:docker:up": "docker compose -f docker-compose.test.yml up -d",
+    "test:docker:down": "docker compose -f docker-compose.test.yml down",
+    "test:run": "vitest run",
+    "test-all": "npm run test:docker:up && npx dotenv-cli -e .env.test -- npm run test:prisma:migrate && npx dotenv-cli -e .env.test -- npm run test:server:up && npx dotenv-cli -e .env.test -- npm run test:run; npm run test:server:down && npm run test:docker:down"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "prisma": "^5.16.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1",
+    "vitest": "^1.6.0"
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
