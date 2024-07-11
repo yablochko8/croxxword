@@ -31,6 +31,25 @@ const CrossWordGrid = ({ boolGrid }: { boolGrid: BoolGrid }): JSX.Element => {
 
     console.log(boolGrid)
 
+    return (
+        <div>
+            {boolGrid.map((row, rowNum) => (
+                <div key={rowNum} style={{ display: 'flex' }} className="flex flex-row bg-red-600">
+                    {row.map((cell, colNum) => (
+                        <div
+                            key={colNum}
+                            style={{
+                                width: '20px',
+                                height: '20px',
+                                backgroundColor: cell ? 'white' : 'black',
+                                border: '1px solid gray'
+                            }}
+                        ></div>
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
     //
     // add logic here
     //
