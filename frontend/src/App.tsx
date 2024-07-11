@@ -1,69 +1,35 @@
 import { useState } from "react";
 import "./App.css";
+import { ShowCrossword } from "./components/ShowCW";
+import { exampleCrossWord, exampleGuess } from "./data/examples";
+import { AlphaGrid, Evaluation } from "./data/types";
+import { expandEvaluation } from "./services/expandEvaluation";
+import { getCrossword, checkGuesses } from "./services/serverCalls";
 
-export const PORT = 4101; // change this to an import before doing anything serious
 
-const serverPath = `http://localhost:${PORT}`;
 
-const getData = async () => {
-  const response = await fetch(`${serverPath}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const json = await response.json();
-  console.log("The server response was:", json.message);
-  return json.message; // unusued here
-};
-
-const postDataAndDisplayResponse = async (
-  message: string,
-  setValuesFromServer: Function
-) => {
-  const response = await fetch(`${serverPath}/newmessage`, {
-    method: "POST",
-    body: JSON.stringify({ message }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const json = await response.json();
-  const updatedMessages = json.messages;
-  console.log("The server response was:", updatedMessages);
-  setValuesFromServer(updatedMessages);
-  return json.messages; // unused here
-};
 
 function App() {
-  const [submittedValue, setSubmittedValue] = useState("");
-  const [valuesFromServer, setValuesFromServer] = useState(["starting data"]);
+  const [guessGrid, setGuessGrid] = useState<AlphaGrid>(exampleGuess);
+  const [guessEvaluation, setGuessEvaluation] = useState<Evaluation | null>(null);
+
 
   return (
     <>
-      <button onClick={() => getData()}>Call the GET Endpoint</button>
+      <ShowCrossword cw={exampleCrossWord} gg={guessGrid} setGG={setGuessGrid} />
       <br />
-      <br />
-
-      <div>Enter text here:</div>
-      <input
-        type="text"
-        value={submittedValue}
-        onChange={(e) => {
-          setSubmittedValue(e.target.value);
-        }}
-      />
       <br />
       <button
         onClick={() =>
-          postDataAndDisplayResponse(submittedValue, setValuesFromServer)
+          checkGuesses(guessGrid, setGuessEvaluation)
         }
       >
-        Call the POST Endpoint
+        Check Answers
       </button>
-      {valuesFromServer.map((value, index) => {
-        return <div key={index}>{value}</div>;
-      })}
+      <br />
+      {(guessEvaluation) ? expandEvaluation(guessEvaluation) : null}
+      <br />
+      <button onClick={() => getCrossword()}>Call the GET Endpoint</button>
     </>
   );
 }
