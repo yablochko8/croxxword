@@ -1,3 +1,5 @@
+import { AlphaGrid, Evaluation } from "../data/types";
+
 export const PORT = 4101; // change this to an import before doing anything serious
 
 const serverPath = `http://localhost:${PORT}`;
@@ -26,20 +28,20 @@ export const getCrossword = async () => {
  * This will eventually let you send guesses to the server.
  *
  */
-export const sendGuesses = async (
-  message: string,
-  setValuesFromServer: Function
+export const checkGuesses = async (
+  guesses: AlphaGrid,
+  callbackFn: Function
 ) => {
   const response = await fetch(`${serverPath}/newmessage`, {
     method: "POST",
-    body: JSON.stringify({ message }),
+    body: JSON.stringify({ guesses }),
     headers: {
       "Content-Type": "application/json",
     },
   });
   const json = await response.json();
-  const updatedMessages = json.messages;
+  const updatedMessages: Evaluation = json.messages;
   console.log("The server response was:", updatedMessages);
-  setValuesFromServer(updatedMessages);
+  callbackFn(updatedMessages);
   return json.messages; // unused here
 };

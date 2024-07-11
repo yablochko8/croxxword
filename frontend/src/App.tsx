@@ -4,7 +4,7 @@ import { ShowCrossword } from "./components/ShowCW";
 import { exampleCrossWord, exampleGuess } from "./data/examples";
 import { AlphaGrid, Evaluation } from "./data/types";
 import { expandEvaluation } from "./services/expandEvaluation";
-import { getCrossword, sendGuesses } from "./services/serverCalls";
+import { getCrossword, checkGuesses } from "./services/serverCalls";
 
 
 
@@ -21,7 +21,7 @@ function App() {
       <br />
       <button
         onClick={() =>
-          sendGuesses("guessGrid", setGuessEvaluation)
+          checkGuesses(guessGrid, setGuessEvaluation)
         }
       >
         Check Answers
