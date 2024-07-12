@@ -1,37 +1,39 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
 import { expandEvaluation } from "./services/expandEvaluation";
 import { getCrossword, checkGuesses } from "./services/serverCalls";
-import { AlphaGrid, Evaluation, Author, GridDisplay } from "../../shared/types";
-import { exampleCrossWord, exampleFEGridDisplay } from "../../shared/examples";
+import { AlphaGrid, Results, Author, GridDisplay } from "../../shared/types";
+import { exampleAuthor, exampleCrossWord, exampleFEGridDisplay } from "../../shared/examples";
+import { useController } from "./services/useController";
 
-const newAuthor: Author = { name: "Mr Jim" }
+const currentUser = exampleAuthor
+
 
 
 function App() {
-  const [gridDisplay, setGridDisplay] = useState<GridDisplay>(exampleFEGridDisplay);
-  const [guessEvaluation, setGuessEvaluation] = useState<Evaluation | null>(null);
+
+
+  const { gridDisplay, onClickCheck, changeLetter, results } = useController(123, currentUser.id);
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
 
   return (
     <>
-      <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} />
+      <div>Welcome {currentUser.name}</div>
+      <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} changeLetter={() => changeLetter} />
+
       <br />
-      <div>{newAuthor.name}</div>
       <br />
       <button
         onClick={() =>
-          checkGuesses(gridDisplay, setGuessEvaluation)
+          onClickCheck()
         }
       >
         Check Answers
       </button>
       <br />
-      {(guessEvaluation) ? expandEvaluation(guessEvaluation) : null}
-      <br />
-      <button onClick={() => getCrossword()}>Call the GET Endpoint</button>
+      {(results) ? expandEvaluation(results) : null}
     </>
   );
 }

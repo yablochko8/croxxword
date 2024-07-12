@@ -1,5 +1,5 @@
 import { FECrossword, BoolGrid, FEClue, AlphaGrid, GridDisplay, ClueDisplay } from "../../../shared/types"
-
+import React from "react";
 
 type TileProps = {
     isInteractive: boolean;
@@ -99,7 +99,7 @@ const ClueColumn = ({ clues }: { clues: FEClue[] }): JSX.Element => {
  * - submit button
  * @returns JSX.Element
  */
-export const ShowCrossword = ({ gridDisplay, clues }: { gridDisplay: GridDisplay, clues: FEClue[] }): JSX.Element => {
+export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDisplay: GridDisplay, clues: FEClue[], changeLetter: () => void }): JSX.Element => {
 
     console.log(gridDisplay.tiles)
     console.log(clues)

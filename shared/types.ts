@@ -3,6 +3,7 @@ export type AlphaGrid = string[][];
 export type BoolGrid = boolean[][];
 
 export type Author = {
+  id: number;
   name: string;
 };
 
@@ -46,7 +47,7 @@ export type GridDisplay = {
 
 export type ClueDisplay = FEClue[];
 
-export type Evaluation = {
+export type Results = {
   correctWords: number;
   wrongWords: number;
   correctLetters: number;

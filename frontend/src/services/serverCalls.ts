@@ -1,4 +1,4 @@
-import { AlphaGrid, Evaluation, GridDisplay } from "../../../shared/types";
+import { AlphaGrid, Results, GridDisplay } from "../../../shared/types";
 
 export const PORT = 4101; // change this to an import before doing anything serious
 
@@ -41,7 +41,7 @@ export const checkGuesses = async (
     },
   });
   const json = await response.json();
-  const updatedMessages: Evaluation = json.messages;
+  const updatedMessages: Results = json.messages;
   console.log("The server response was:", updatedMessages);
   callbackFn(updatedMessages);
   return json.messages; // unused here

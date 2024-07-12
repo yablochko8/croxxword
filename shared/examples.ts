@@ -7,7 +7,8 @@ import {
   FECrossword,
 } from "./types";
 
-const exampleAuthor: Author = {
+export const exampleAuthor: Author = {
+  id: 999,
   name: "maverick",
 };
 
@@ -92,7 +93,7 @@ const exampleGuess: AlphaGrid = [
   ["", "O", "", "", "", "", "", ""],
 ];
 
-const exampleEvaluation: BoolGrid = [
+export const exampleEvaluation: BoolGrid = [
   [false, false, false, false, false, false, false, false],
   [true, true, true, false, false, false, false, false],
   [false, false, false, false, false, false, false, false],
@@ -107,4 +108,12 @@ export const exampleFEGridDisplay = {
   tiles: exampleTiles,
   guesses: exampleGuess,
   evaluation: exampleEvaluation,
+};
+
+export const exampleResults = {
+  correctWords: 3,
+  wrongWords: 2,
+  correctLetters: 10,
+  wrongLetters: 1,
+  evaluationGrid: exampleEvaluation,
 };
