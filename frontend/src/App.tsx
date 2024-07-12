@@ -1,37 +1,43 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
 import { expandEvaluation } from "./services/expandEvaluation";
-import { getCrossword, checkGuesses } from "./services/serverCalls";
-import { AlphaGrid, Evaluation, Author, GridDisplay } from "../../shared/types";
-import { exampleCrossWord, exampleFEGridDisplay } from "../../shared/examples";
+import { exampleAuthor, exampleCrossWord } from "../../shared/examples";
+import { useController } from "./services/useController";
 
-const newAuthor: Author = { name: "Mr Jim" }
+const currentUser = exampleAuthor
+
+const crosswordId = 123
+
 
 
 function App() {
-  const [gridDisplay, setGridDisplay] = useState<GridDisplay>(exampleFEGridDisplay);
-  const [guessEvaluation, setGuessEvaluation] = useState<Evaluation | null>(null);
+
+
+  const { gridDisplay, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
 
   return (
     <>
-      <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} />
-      <br />
-      <div>{newAuthor.name}</div>
-      <br />
-      <button
-        onClick={() =>
-          checkGuesses(gridDisplay, setGuessEvaluation)
-        }
-      >
-        Check Answers
-      </button>
-      <br />
-      {(guessEvaluation) ? expandEvaluation(guessEvaluation) : null}
-      <br />
-      <button onClick={() => getCrossword()}>Call the GET Endpoint</button>
+      <div className="min-h-screen">
+
+
+        <div>Welcome {currentUser.name}</div>
+        <div>Crossword # {crosswordId}</div>
+        <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} onInput={changeLetter} />
+
+
+        <button
+          onClick={() => onClickCheck()}
+          className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg m-5"
+        >
+          Check Answers
+        </button>
+        <div>
+          {(results) ? expandEvaluation(results) : null}
+        </div>
+      </div>
     </>
   );
 }
