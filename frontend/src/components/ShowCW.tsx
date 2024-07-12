@@ -1,5 +1,4 @@
-import { CrossWord, BoolGrid, Clue, AlphaGrid } from "../data/types"
-import { answerLength } from "../services/answerLength";
+import { FECrossword, BoolGrid, FEClue, AlphaGrid, GridDisplay, ClueDisplay } from "../../../shared/types"
 
 
 type TileProps = {
@@ -73,7 +72,7 @@ const CrossWordGrid = ({ boolGrid }: { boolGrid: BoolGrid }): JSX.Element => {
  * Takes in set of clues and displays them prettily.
  * 
  */
-const ClueColumn = ({ clues }: { clues: Clue[] }): JSX.Element => {
+const ClueColumn = ({ clues }: { clues: FEClue[] }): JSX.Element => {
 
     console.log(clues)
 
@@ -87,7 +86,7 @@ const ClueColumn = ({ clues }: { clues: Clue[] }): JSX.Element => {
             <div>Clue 1 - This is a beautiful column of clues</div>
             <div> it looks something like this... </div>
             {clues.map((clue, index) => (
-                <div key={index}>{clue.hint} ({answerLength(clue.answer)})</div>
+                <div key={index}>{clue.hint} ({clue.answerLength.join(", ")})</div>
             ))}
         </>
     )
@@ -100,11 +99,10 @@ const ClueColumn = ({ clues }: { clues: Clue[] }): JSX.Element => {
  * - submit button
  * @returns JSX.Element
  */
-export const ShowCrossword = ({ cw, gg, setGG }: { cw: CrossWord, gg: AlphaGrid, setGG: Function }): JSX.Element => {
+export const ShowCrossword = ({ gridDisplay, clues }: { gridDisplay: GridDisplay, clues: FEClue[] }): JSX.Element => {
 
-    console.log(cw.clues)
-    console.log(gg)
-    console.log(setGG)
+    console.log(gridDisplay.tiles)
+    console.log(clues)
 
     //
     // add logic here
@@ -112,7 +110,7 @@ export const ShowCrossword = ({ cw, gg, setGG }: { cw: CrossWord, gg: AlphaGrid,
 
     return (<>
         <div>This is a beautiful crossword.</div>
-        <CrossWordGrid boolGrid={cw.tiles} />
-        <ClueColumn clues={cw.clues} />
+        <CrossWordGrid boolGrid={gridDisplay.tiles} />
+        <ClueColumn clues={clues} />
     </>)
 };

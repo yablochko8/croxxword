@@ -8,20 +8,22 @@ export type Author = {
 
 export type BEClue = {
   hint: string;
-  answer: string;
   isRow: boolean;
   rowStart: number;
   colStart: number;
   author: Author;
+  answer: string;
+  // answerLength: number[];
 };
 
 export type FEClue = {
   hint: string;
-  // answer: string; (OTHERWISE IDENTICAL)
   isRow: boolean;
   rowStart: number;
   colStart: number;
   author: Author;
+  // answer: string;
+  answerLength: number[];
 };
 
 export type BECrossword = {
@@ -41,6 +43,8 @@ export type GridDisplay = {
   guesses: AlphaGrid;
   evaluation: BoolGrid;
 };
+
+export type ClueDisplay = FEClue[];
 
 export type Evaluation = {
   correctWords: number;

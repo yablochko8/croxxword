@@ -1,17 +1,14 @@
-import { Author } from "../../../shared/types";
+// import { Author } from "../../../shared/types";
 
-const cats: Author = { name: "hello" };
+// const cats: Author = { name: "hello" };
 
-export const answerLength = (answer: string): string => {
-  console.log(answer);
-  // takes a string and returns the length of the string
-  // if the string is "Paris" it returns "5"
-  // but if the string is "New York" it returns "3, 4"
+// /**
+//  * takes an array of numbers and returns a string
+//  * if the array is [5] it returns "5"
+//  * if the array is [3, 4] it returns "3, 4"
+//  */
+// export const answerLength = (answerLength: number[]): string => {
+//   return answerLength.join(", ");
+// };
 
-  return answer
-    .split(" ")
-    .map((word) => word.length)
-    .join(", ");
-};
-
-console.log(cats.name);
+// console.log(cats.name);
