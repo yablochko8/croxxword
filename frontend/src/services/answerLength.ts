@@ -1,3 +1,7 @@
+import { Author } from "../../../shared/types";
+
+const cats: Author = { name: "hello" };
+
 export const answerLength = (answer: string): string => {
   console.log(answer);
   // takes a string and returns the length of the string
@@ -9,3 +13,5 @@ export const answerLength = (answer: string): string => {
     .map((word) => word.length)
     .join(", ");
 };
+
+console.log(cats.name);

@@ -5,8 +5,9 @@ import { exampleCrossWord, exampleGuess } from "./data/examples";
 import { AlphaGrid, Evaluation } from "./data/types";
 import { expandEvaluation } from "./services/expandEvaluation";
 import { getCrossword, checkGuesses } from "./services/serverCalls";
+import { Author } from "../../shared/types";
 
-
+const newAuthor: Author = { name: "Mr Jim" }
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
     <>
       <ShowCrossword cw={exampleCrossWord} gg={guessGrid} setGG={setGuessGrid} />
       <br />
+      <div>{newAuthor.name}</div>
       <br />
       <button
         onClick={() =>
