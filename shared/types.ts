@@ -41,6 +41,7 @@ export type GridDisplay = {
   guesses: AlphaGrid;
   evaluation: BoolGrid;
 };
+
 export type Evaluation = {
   correctWords: number;
   wrongWords: number;
