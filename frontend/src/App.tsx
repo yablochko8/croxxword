@@ -7,31 +7,37 @@ import { useController } from "./services/useController";
 
 const currentUser = exampleAuthor
 
+const crosswordId = 123
+
 
 
 function App() {
 
 
-  const { gridDisplay, onClickCheck, changeLetter, results } = useController(123, currentUser.id);
+  const { gridDisplay, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
 
   return (
     <>
-      <div>Welcome {currentUser.name}</div>
-      <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} onInput={changeLetter} />
+      <div className="min-h-screen">
 
-      <br />
-      <br />
-      <button
-        onClick={() =>
-          onClickCheck()
-        }
-      >
-        Check Answers
-      </button>
-      <br />
-      {(results) ? expandEvaluation(results) : null}
+
+        <div>Welcome {currentUser.name}</div>
+        <div>Crossword # {crosswordId}</div>
+        <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} onInput={changeLetter} />
+
+
+        <button
+          onClick={() => onClickCheck()}
+          className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg m-5"
+        >
+          Check Answers
+        </button>
+        <div>
+          {(results) ? expandEvaluation(results) : null}
+        </div>
+      </div>
     </>
   );
 }

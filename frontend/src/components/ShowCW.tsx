@@ -46,12 +46,8 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput }: { gridDisplay: Gr
                         maxLength={1}
                         className="w-full h-full text-center"
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
-                        onChange={(e) => {
-                            console.log("Yes this happening", e.target.value);
-                            onInput(e.target.value.toUpperCase(), rowNum, colNum)
-                        }}
-
-                    // onChange={(e) => onInput(e.target.value, rowNum, colNum)}
+                        onChange={(e) => onInput(e.target.value.toUpperCase(), rowNum, colNum)
+                        }
 
                     />
                 ) : (
@@ -120,15 +116,7 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput }: { gridDisplay: Gr
         )
     };
 
-    console.log(gridDisplay)
-
-
-    //
-    // add logic here
-    //
-
     return (<>
-        <div>This is a beautiful crossword.</div>
         <CrossWordGrid boolGrid={gridDisplay.tiles} />
         <ClueColumn clues={clues} />
     </>)

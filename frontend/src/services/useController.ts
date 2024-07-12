@@ -27,7 +27,7 @@ export const useController = (crosswordId: number, authorId: number) => {
    * Sends user's guesses to the server to check if they are correct.
    */
   const onClickCheck = async () => {
-    console.log("Checking the server now");
+    console.log("Checking the server now (not really)");
     // something something gridDisplay.evaluation
     setResults(exampleResults);
   };
