@@ -7,6 +7,12 @@ export type Author = {
   name: string;
 };
 
+export type BankClue = {
+  hint: string;
+  author: Author;
+  answer: string;
+};
+
 export type BEClue = {
   hint: string;
   isRow: boolean;
