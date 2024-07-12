@@ -12,6 +12,9 @@ const cellStylesCommon = "flex flex-col rounded-sm w-5 h-5"
 const inputCell = `${cellStylesCommon} bg-white border border-gray-500`
 const blankCell = `${cellStylesCommon} ${bgColor}`
 
+const clueSubtitle = "text-sm text-gray-500 mt-5"
+
+const clueHint = "text-sm text-zinc-900"
 
 /**
  * Takes in a CrossWord and shows it, including:
@@ -42,10 +45,11 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
                         type="text"
                         maxLength={1}
                         className="w-full h-full text-center"
+                        defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={(e) => changeLetter(e.target.value.toUpperCase(), rowNum, colNum)}
                     />
                 ) : (
-                    <div>.</div>
+                    <div />
                 )}
             </div>
         );
@@ -54,25 +58,15 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
     /**
      * Takes in set of booleans and returns an interactive grid.
      * User can click on a tile and enter a single letter onto it.
-     * 
      */
     const CrossWordGrid = ({ boolGrid }: { boolGrid: BoolGrid }): JSX.Element => {
-
-
-
-
         return (
             <div className="flex flex-row justify-center">
                 <div className={flexCol} >
                     {boolGrid.map((row, rowNum) => (
                         <div key={rowNum} className={flexRow}>
                             {row.map((cell, colNum) => (
-                                <div
-                                    key={colNum}
-                                    className={cell ? inputCell : blankCell}
-                                >
-                                    <Tile isInteractive={cell} rowNum={rowNum} colNum={colNum} />
-                                </div>
+                                <Tile isInteractive={cell} rowNum={rowNum} colNum={colNum} />
                             ))}
                         </div>
                     ))}
@@ -80,40 +74,45 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
 
             </div>
         );
-        //
-        // add logic here
-        //
-
-        return (
-            <>
-                <div>This is a beautiful grid made of tiles that look like this:</div>
-                <Tile isInteractive={true} rowNum={0} colNum={0} />
-            </>
-        )
     };
+
+
+    const ClueSection = ({ clues }: { clues: FEClue[] }): JSX.Element => {
+        return (
+            <div className="clue-list">
+                {clues.map((clue, index) => (
+                    <div key={index} className={clueHint}>
+                        {clue.hint} ({clue.answerLength.join(", ")})
+                    </div>
+                ))}
+            </div>
+        )
+    }
+
+
+
+
 
 
     /**
      * Takes in set of clues and displays them prettily.
-     * 
      */
     const ClueColumn = ({ clues }: { clues: FEClue[] }): JSX.Element => {
 
-        console.log(clues)
-
-        //
-        // add logic here
-        //
+        const cluesAcross = clues.filter((clue) => clue.isRow)
+        const cluesDown = clues.filter((clue) => !clue.isRow)
 
         return (
-            <>
-
-                <div>Clue 1 - This is a beautiful column of clues</div>
-                <div> it looks something like this... </div>
-                {clues.map((clue, index) => (
-                    <div key={index}>{clue.hint} ({clue.answerLength.join(", ")})</div>
-                ))}
-            </>
+            <div className="clue-column">
+                <div className={clueSubtitle}>
+                    Clues Across
+                </div>
+                <ClueSection clues={cluesAcross} />
+                <div className={clueSubtitle}>
+                    Clues Down
+                </div>
+                <ClueSection clues={cluesDown} />
+            </div>
         )
     };
 
