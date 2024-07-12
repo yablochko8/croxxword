@@ -1,6 +1,10 @@
 import express from "express";
 import cors from "cors";
 
+import { Author } from "../shared/types";
+const newAuthor: Author = { name: "Mrs Berlaigne" };
+const testingTypes = newAuthor.name;
+
 export const PORT = 4101;
 
 const app = express();
@@ -10,7 +14,7 @@ app.use(cors());
 
 app.get("/", async (req, res) => {
   console.log("GET endpoint called.");
-  res.json({ message: "Hello from the server" });
+  res.json({ message: `"Hello from the server" ${testingTypes}` });
 });
 
 const storedValues: string[] = [];

@@ -1,4 +1,4 @@
-import { AlphaGrid, Evaluation } from "../data/types";
+import { AlphaGrid, Evaluation, GridDisplay } from "../../../shared/types";
 
 export const PORT = 4101; // change this to an import before doing anything serious
 
@@ -29,9 +29,10 @@ export const getCrossword = async () => {
  *
  */
 export const checkGuesses = async (
-  guesses: AlphaGrid,
+  gridDisplay: GridDisplay,
   callbackFn: Function
 ) => {
+  const guesses = gridDisplay.guesses;
   const response = await fetch(`${serverPath}/newmessage`, {
     method: "POST",
     body: JSON.stringify({ guesses }),
