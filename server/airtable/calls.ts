@@ -30,7 +30,7 @@ const addClue = async (
   });
 
   const json = await response.json();
-  console.log(json);
+  console.log("addClue called, response from AirTable:", json);
 };
 
-addClue("now without", "dotenv", "yo");
+// addClue("test", "this", "endpoint");
