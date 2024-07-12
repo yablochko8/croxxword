@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
 import { expandEvaluation } from "./services/expandEvaluation";
-import { getCrossword, checkGuesses } from "./services/serverCalls";
-import { AlphaGrid, Results, Author, GridDisplay } from "../../shared/types";
-import { exampleAuthor, exampleCrossWord, exampleFEGridDisplay } from "../../shared/examples";
+import { exampleAuthor, exampleCrossWord } from "../../shared/examples";
 import { useController } from "./services/useController";
 
 const currentUser = exampleAuthor
@@ -21,7 +19,7 @@ function App() {
   return (
     <>
       <div>Welcome {currentUser.name}</div>
-      <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} changeLetter={() => changeLetter} />
+      <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} onInput={changeLetter} />
 
       <br />
       <br />

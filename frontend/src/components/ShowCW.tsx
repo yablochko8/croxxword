@@ -22,7 +22,7 @@ const clueHint = "text-sm text-zinc-900"
  * - clues
  * @returns JSX.Element
  */
-export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDisplay: GridDisplay, clues: FEClue[], changeLetter: (letter: string, rowNum: number, colNum: number) => void }): JSX.Element => {
+export const ShowCrossword = ({ gridDisplay, clues, onInput }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void }): JSX.Element => {
 
 
     type TileProps = {
@@ -39,14 +39,20 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
 
         const tileStyle = isInteractive ? inputCell : blankCell
         return (
-            <div className={tileStyle}>
+            <div className={tileStyle} >
                 {isInteractive ? (
                     <input
                         type="text"
                         maxLength={1}
                         className="w-full h-full text-center"
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
-                        onChange={(e) => changeLetter(e.target.value.toUpperCase(), rowNum, colNum)}
+                        onChange={(e) => {
+                            console.log("Yes this happening", e.target.value);
+                            onInput(e.target.value.toUpperCase(), rowNum, colNum)
+                        }}
+
+                    // onChange={(e) => onInput(e.target.value, rowNum, colNum)}
+
                     />
                 ) : (
                     <div />
@@ -66,7 +72,7 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
                     {boolGrid.map((row, rowNum) => (
                         <div key={rowNum} className={flexRow}>
                             {row.map((cell, colNum) => (
-                                <Tile isInteractive={cell} rowNum={rowNum} colNum={colNum} />
+                                <Tile isInteractive={cell} rowNum={rowNum} colNum={colNum} key={`${rowNum}-${colNum}`} />
                             ))}
                         </div>
                     ))}
@@ -76,7 +82,9 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
         );
     };
 
-
+    /**
+     * Takes in list of clues and displays them prettily.
+     */
     const ClueSection = ({ clues }: { clues: FEClue[] }): JSX.Element => {
         return (
             <div className="clue-list">
@@ -90,12 +98,8 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
     }
 
 
-
-
-
-
     /**
-     * Takes in set of clues and displays them prettily.
+     * Takes in set of clues and organises them into Across & Down
      */
     const ClueColumn = ({ clues }: { clues: FEClue[] }): JSX.Element => {
 
@@ -116,8 +120,8 @@ export const ShowCrossword = ({ gridDisplay, clues, changeLetter }: { gridDispla
         )
     };
 
-    console.log(gridDisplay.tiles)
-    console.log(clues)
+    console.log(gridDisplay)
+
 
     //
     // add logic here
