@@ -41,20 +41,11 @@ export const clueBank: BankClue[] = [
     author: fillerAuthor,
     answer: "PACIFIC",
   },
-  {
-    hint: "Gold of Australia.",
-    author: fillerAuthor,
-    answer: "AU",
-  },
+
   {
     hint: "Always this time zone is the tallest mountain in the world?",
     author: fillerAuthor,
     answer: "EVEREST",
-  },
-  {
-    hint: "Irrelevant sodium?",
-    author: fillerAuthor,
-    answer: "NA",
   },
 
   {
@@ -85,5 +76,11 @@ export const clueBank: BankClue[] = [
     hint: "Rider's blades have lost their edge, and posture has lost its spine, but they still have a sense of mission.",
     author: fillerAuthor,
     answer: "PURPOSE",
+  },
+
+  {
+    hint: "The answer is AUTHOR",
+    author: fillerAuthor,
+    answer: "AUTHOR",
   },
 ];
