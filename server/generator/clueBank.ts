@@ -4,7 +4,8 @@ const fillerAuthor: Author = {
   name: "John Doe",
   id: 1,
 };
-const clueBank: BankClue[] = [
+
+export const clueBank: BankClue[] = [
   {
     hint: "Blonde bombshell hosting the Olympics",
     author: fillerAuthor,
@@ -40,19 +41,46 @@ const clueBank: BankClue[] = [
     author: fillerAuthor,
     answer: "PACIFIC",
   },
-  {
-    hint: "Gold of Australia.",
-    author: fillerAuthor,
-    answer: "AU",
-  },
+
   {
     hint: "Always this time zone is the tallest mountain in the world?",
     author: fillerAuthor,
     answer: "EVEREST",
   },
+
   {
-    hint: "Irrelevant sodium?",
+    hint: "This animal sounds hawkish, like a failing cow.",
     author: fillerAuthor,
-    answer: "NA",
+    answer: "FOX",
+  },
+
+  {
+    hint: "Money inside doctoer is a mixed-up laugh.",
+    author: fillerAuthor,
+    answer: "DOLLAR",
+  },
+
+  {
+    hint: "Underground sandwich franchise.",
+    author: fillerAuthor,
+    answer: "SUBWAY",
+  },
+
+  {
+    hint: "Famous Houston gallery.",
+    author: fillerAuthor,
+    answer: "WHITNEY",
+  },
+
+  {
+    hint: "Rider's blades have lost their edge, and posture has lost its spine, but they still have a sense of mission.",
+    author: fillerAuthor,
+    answer: "PURPOSE",
+  },
+
+  {
+    hint: "The answer is AUTHOR",
+    author: fillerAuthor,
+    answer: "AUTHOR",
   },
 ];
