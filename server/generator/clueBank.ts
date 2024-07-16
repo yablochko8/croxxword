@@ -4,7 +4,8 @@ const fillerAuthor: Author = {
   name: "John Doe",
   id: 1,
 };
-const clueBank: BankClue[] = [
+
+export const clueBank: BankClue[] = [
   {
     hint: "Blonde bombshell hosting the Olympics",
     author: fillerAuthor,

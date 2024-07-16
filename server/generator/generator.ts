@@ -1,8 +1,9 @@
 import { exampleAuthor } from "../../shared/examples";
 import { AlphaGrid, BEClue, BECrossword, BankClue } from "../../shared/types";
+import { clueBank } from "./clueBank";
 import { alphaGridGenerator } from "./gridGenerator";
 
-const newCW: BECrossword = {
+const templateCW: BECrossword = {
   id: 456,
   name: "new crossword yo",
   clues: [],
@@ -17,6 +18,84 @@ const exampleClue3BE: BEClue = {
   answer: "SAN DIEGO",
 };
 
+const generateNewCW = (): BECrossword => {
+  let clues: BEClue[] = [];
+
+  for (let i = 0; i < clueBank.length; i++) {
+    const bankClue = clueBank[i];
+    for (let rowNum = 0; rowNum < 8; rowNum++) {
+      for (let colNum = 0; colNum < 8; colNum++) {
+        console.log(
+          "Validating RowNum:",
+          rowNum,
+          "ColNum:",
+          colNum,
+          "BankClue Hint:",
+          bankClue.hint
+        );
+
+        const newRowClue: BEClue = {
+          ...bankClue,
+          rowStart: rowNum,
+          colStart: colNum,
+          isRow: true,
+        };
+        const tempClues = [...clues];
+        tempClues.push(newRowClue);
+        if (validateBECW(tempClues)) {
+          console.log("CLUE ADDED");
+          clues.push(newRowClue);
+        } else {
+          const newColClue: BEClue = {
+            ...bankClue,
+            rowStart: rowNum,
+            colStart: colNum,
+            isRow: false,
+          };
+          const tempClues = [...clues];
+          tempClues.push(newColClue);
+          if (validateBECW(tempClues)) {
+            console.log("CLUE ADDED");
+            clues.push(newColClue);
+          }
+        }
+      }
+    }
+  }
+
+  return { id: 123, name: "new cw yo", clues: clues };
+};
+
+// Raw material = BankClue
+// Processed material = BankClue + Position = BEClue
+// Output = collection of BEClues = BECrossword
+
+// Test: BECrossword => no contradictions
+
+/**
+ * Cycles through every clue in a BE Crossword and confirms
+ * there are no tile clashes.
+ */
+const validateBECW = (clues: BEClue[]): boolean => {
+  let answerGrid = alphaGridGenerator(8);
+
+  for (const clue of clues) {
+    const result = tryAddClueToGrid(
+      answerGrid,
+      clue,
+      clue.isRow,
+      clue.rowStart,
+      clue.colStart
+    );
+    if (result === null) {
+      return false;
+    }
+    answerGrid = result;
+  }
+
+  return true;
+};
+
 /**
  * Returns an answer grid if possible
  */
@@ -25,7 +104,7 @@ const buildAnswerGrid = (source: BECrossword): null | AlphaGrid => {
 
   // go through every item in source.clues and add it to the answer grid
   for (const clue of source.clues) {
-    const result = tryAddClue(
+    const result = tryAddClueToGrid(
       answerGrid,
       clue,
       clue.isRow,
@@ -41,8 +120,8 @@ const buildAnswerGrid = (source: BECrossword): null | AlphaGrid => {
   return answerGrid;
 };
 
-const tryAddClue = (
-  target: AlphaGrid,
+const tryAddClueToGrid = (
+  targetGrid: AlphaGrid,
   bankClue: BankClue,
   isRow: boolean,
   rowStart: number,
@@ -55,26 +134,27 @@ const tryAddClue = (
     rowStart,
     colStart
   );
-  const answerGrid = structuredClone(target);
+  const answerGrid = structuredClone(targetGrid);
 
   // Remove all spaces from the answer
   const squashedClue = bankClue.answer.replace(/\s+/g, "");
-
   // Add the answer to the grid
   for (let i = 0; i < squashedClue.length; i++) {
     if (isRow) {
       if (
-        answerGrid[rowStart][colStart + i] &&
-        answerGrid[rowStart][colStart + i] !== bankClue.answer[i]
+        colStart + i >= answerGrid[rowStart].length ||
+        (answerGrid[rowStart][colStart + i] &&
+          answerGrid[rowStart][colStart + i] !== bankClue.answer[i])
       ) {
-        // If adding a letter to a Tile invovles changing that letter, this clue can't go here!
+        // If adding a letter to a Tile involves changing that letter or expanding the grid, this clue can't go here!
         return null;
       }
       answerGrid[rowStart][colStart + i] = bankClue.answer[i];
     } else {
       if (
-        answerGrid[rowStart + i][colStart] &&
-        answerGrid[rowStart + i][colStart] !== bankClue.answer[i]
+        rowStart + i >= answerGrid.length ||
+        (answerGrid[rowStart + i][colStart] &&
+          answerGrid[rowStart + i][colStart] !== bankClue.answer[i])
       ) {
         return null;
       }
@@ -83,3 +163,7 @@ const tryAddClue = (
   }
   return answerGrid;
 };
+
+const testNewCW = generateNewCW();
+
+console.log(testNewCW);
