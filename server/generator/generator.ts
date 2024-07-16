@@ -21,42 +21,58 @@ const exampleClue3BE: BEClue = {
 const generateNewCW = (): BECrossword => {
   let clues: BEClue[] = [];
 
+  let rowsWithClues: number[] = [];
+  let colsWithClues: number[] = [];
+
   for (let i = 0; i < clueBank.length; i++) {
     const bankClue = clueBank[i];
-    for (let rowNum = 0; rowNum < 8; rowNum++) {
+    let clueUsed = false;
+    clueLoop: for (let rowNum = 0; rowNum < 8; rowNum++) {
       for (let colNum = 0; colNum < 8; colNum++) {
-        console.log(
-          "Validating RowNum:",
-          rowNum,
-          "ColNum:",
-          colNum,
-          "BankClue Hint:",
-          bankClue.hint
-        );
+        if (clueUsed) {
+          break clueLoop;
+        }
 
-        const newRowClue: BEClue = {
-          ...bankClue,
-          rowStart: rowNum,
-          colStart: colNum,
-          isRow: true,
-        };
-        const tempClues = [...clues];
-        tempClues.push(newRowClue);
-        if (validateBECW(tempClues)) {
-          console.log("CLUE ADDED");
-          clues.push(newRowClue);
+        if (
+          colsWithClues.includes(colNum) ||
+          colsWithClues.includes(colNum - 1) ||
+          rowsWithClues.includes(rowNum) ||
+          rowsWithClues.includes(rowNum - 1)
+        ) {
+          console.log("Adjacent.", colNum, rowNum);
         } else {
-          const newColClue: BEClue = {
+          // STEP ONE - see if this CLUE fits on this TILE as a ROW
+          const newRowClue: BEClue = {
             ...bankClue,
             rowStart: rowNum,
             colStart: colNum,
-            isRow: false,
+            isRow: true,
           };
           const tempClues = [...clues];
-          tempClues.push(newColClue);
+          tempClues.push(newRowClue);
+
           if (validateBECW(tempClues)) {
             console.log("CLUE ADDED");
-            clues.push(newColClue);
+            clues.push(newRowClue);
+            rowsWithClues.push(rowNum);
+
+            clueUsed = true;
+          } else {
+            // STEP TWO - see if this CLUE fits on this TILE as a COL
+            const newColClue: BEClue = {
+              ...bankClue,
+              rowStart: rowNum,
+              colStart: colNum,
+              isRow: false,
+            };
+            const tempClues2 = [...clues];
+            tempClues.push(newColClue);
+            if (validateBECW(tempClues2)) {
+              console.log("CLUE ADDED");
+              clues.push(newColClue);
+              colsWithClues.push(colNum);
+              clueUsed = true;
+            }
           }
         }
       }
@@ -166,4 +182,7 @@ const tryAddClueToGrid = (
 
 const testNewCW = generateNewCW();
 
+export const testNewGrid = buildAnswerGrid(testNewCW);
+
 console.log(testNewCW);
+console.log(testNewGrid);

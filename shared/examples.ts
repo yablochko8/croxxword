@@ -93,6 +93,17 @@ const exampleGuess: AlphaGrid = [
   ["", "O", "", "", "", "", "", ""],
 ];
 
+export const exampleGuess2: AlphaGrid = [
+  ["P", "A", "R", "I", "S", "J", "T", "D"],
+  ["O", "P", "O", "A", "U", "U", "O", "I"],
+  ["T", "A", "M", "N", "A", "P", "K", "A"],
+  ["T", "C", "E", "", "", "I", "Y", "M"],
+  ["A", "I", "", "", "", "T", "O", "O"],
+  ["W", "F", "", "", "", "E", "", "N"],
+  ["A", "I", "", "", "", "R", "", "D"],
+  ["", "C", "", "", "", "", "", ""],
+];
+
 export const exampleEvaluation: BoolGrid = [
   [false, false, false, false, false, false, false, false],
   [true, true, true, false, false, false, false, false],
@@ -106,7 +117,7 @@ export const exampleEvaluation: BoolGrid = [
 
 export const exampleFEGridDisplay = {
   tiles: exampleTiles,
-  guesses: exampleGuess,
+  guesses: exampleGuess2,
   evaluation: exampleEvaluation,
 };
 

@@ -56,4 +56,34 @@ export const clueBank: BankClue[] = [
     author: fillerAuthor,
     answer: "NA",
   },
+
+  {
+    hint: "This animal sounds hawkish, like a failing cow.",
+    author: fillerAuthor,
+    answer: "FOX",
+  },
+
+  {
+    hint: "Money inside doctoer is a mixed-up laugh.",
+    author: fillerAuthor,
+    answer: "DOLLAR",
+  },
+
+  {
+    hint: "Underground sandwich franchise.",
+    author: fillerAuthor,
+    answer: "SUBWAY",
+  },
+
+  {
+    hint: "Famous Houston gallery.",
+    author: fillerAuthor,
+    answer: "WHITNEY",
+  },
+
+  {
+    hint: "Rider's blades have lost their edge, and posture has lost its spine, but they still have a sense of mission.",
+    author: fillerAuthor,
+    answer: "PURPOSE",
+  },
 ];
