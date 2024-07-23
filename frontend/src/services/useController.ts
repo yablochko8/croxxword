@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Results, GridDisplay, FECrossword } from "../../../shared/types";
 import { emptyFEGridDisplay, exampleResults } from "../../../shared/examples";
 import { getCrossword } from "./serverCalls";
-import { gridBuilder } from "./buildGrid";
+import { buildGrid } from "./buildGrid";
 // import { checkGuesses } from "./serverCalls";
 
 export const useController = (crosswordId: number, authorId: number) => {
@@ -16,7 +16,7 @@ export const useController = (crosswordId: number, authorId: number) => {
     const fetchCrossword = async () => {
       const crossword = await getCrossword();
       setCrossword(crossword);
-      setGridDisplay(gridBuilder(crossword));
+      setGridDisplay(buildGrid(crossword));
       console.log("Fetched crossword:", crossword);
     };
 
