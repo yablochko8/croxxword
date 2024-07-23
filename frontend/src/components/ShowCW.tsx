@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react"
 import { BoolGrid, FEClue, GridDisplay } from "../../../shared/types"
 
 
@@ -29,12 +30,39 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
         rowNum: number;
         colNum: number;
     }
+    const inputRefs = useRef<(HTMLInputElement | null)[][]>([]);
 
     /**
      * Show an individual tile
      */
     const Tile = (props: TileProps): JSX.Element => {
         const { isInteractive, rowNum, colNum } = props
+        const inputRef = useRef<HTMLInputElement>(null);
+
+        useEffect(() => {
+            if (!inputRefs.current[rowNum]) {
+                inputRefs.current[rowNum] = [];
+            }
+            inputRefs.current[rowNum][colNum] = inputRef.current;
+        }, [inputRef, rowNum, colNum]);
+
+        const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value.toUpperCase();
+            onInput(value, rowNum, colNum);
+
+            if (value) {
+                const nextCol = colNum + 1;
+                setTimeout(() => {
+                    if (inputRefs.current[rowNum] && inputRefs.current[rowNum][nextCol]) {
+                        console.log(`Focusing on inputRefs[${rowNum}][${nextCol}]`);
+                        inputRefs.current[rowNum][nextCol]?.focus();
+                    } else if (inputRefs.current[rowNum + 1] && inputRefs.current[rowNum + 1][0]) {
+                        console.log(`Focusing on inputRefs[${rowNum + 1}][0]`);
+                        inputRefs.current[rowNum + 1][0]?.focus();
+                    }
+                }, 0);
+            }
+        };
 
         const tileStyle = isInteractive ? inputCell : blankCell
 
@@ -52,9 +80,8 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
                         maxLength={1}
                         className={`w-full h-full text-center ${tileColor}`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
-                        onChange={(e) => onInput(e.target.value.toUpperCase(), rowNum, colNum)
-                        }
-
+                        onChange={handleInputChange}
+                        ref={inputRef}
                     />
                 ) : (
                     <div />
