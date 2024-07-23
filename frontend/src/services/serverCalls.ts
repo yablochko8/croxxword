@@ -3,13 +3,16 @@ import { Results, GridDisplay, FECrossword } from "../../../shared/types";
 
 export const PORT = 4101; // change this to an import before doing anything serious
 
-const serverPath = `http://localhost:${PORT}`;
+// NEEDS CONFIG HANDLING
+const serverPath =
+  "https://lui-croxxword.onrender.com" || `http://localhost:${PORT}`;
 
 /**
  * Fetches a crossword from the server. Returns a FECrossword object, no answers.
  */
 export const getCrossword = async (): Promise<FECrossword> => {
   console.log("getCrossword called");
+  console.log("serverPath is:", serverPath);
   try {
     const response = await fetch(`${serverPath}/api/crossword/latest`, {
       method: "GET",
