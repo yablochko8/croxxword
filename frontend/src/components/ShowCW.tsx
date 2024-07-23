@@ -21,7 +21,7 @@ const clueHint = "text-sm text-zinc-900"
  * - clues
  * @returns JSX.Element
  */
-export const ShowCrossword = ({ gridDisplay, clues, onInput }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void }): JSX.Element => {
+export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void, showResults: boolean }): JSX.Element => {
 
 
     type TileProps = {
@@ -37,13 +37,20 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput }: { gridDisplay: Gr
         const { isInteractive, rowNum, colNum } = props
 
         const tileStyle = isInteractive ? inputCell : blankCell
+
+        const isCorrect = gridDisplay.evaluation[rowNum][colNum];
+        const tileColor = isInteractive
+            ? `${inputCell} ${showResults ? (isCorrect ? 'bg-green-500' : gridDisplay.guesses[rowNum][colNum] ? 'bg-red-500' : '') : ''}`
+            : blankCell;
+
+
         return (
             <div className={tileStyle} >
                 {isInteractive ? (
                     <input
                         type="text"
                         maxLength={1}
-                        className="w-full h-full text-center"
+                        className={`w-full h-full text-center ${tileColor}`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={(e) => onInput(e.target.value.toUpperCase(), rowNum, colNum)
                         }

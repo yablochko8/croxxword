@@ -41,9 +41,12 @@ export const useController = (crosswordId: number, authorId: number) => {
    */
   const handleGuessCheck = async () => {
     console.log("Checking the server now (for real)");
-    // something something gridDisplay.evaluation
     const newResults = await checkGuesses(crosswordId, gridDisplay);
     setResults(newResults);
+    setGridDisplay((prevGridDisplay) => ({
+      ...prevGridDisplay,
+      evaluation: newResults.evaluationGrid,
+    }));
   };
 
   const clues = crossword ? crossword.clues : [];

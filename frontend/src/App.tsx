@@ -29,7 +29,7 @@ function App() {
 
         <div>Crossword # {crosswordId}</div>
 
-        <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} />
+        <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} showResults={!!results} />
 
 
 
