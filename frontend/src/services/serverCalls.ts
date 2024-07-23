@@ -5,9 +5,7 @@ export const PORT = 4101; // change this to an import before doing anything seri
 const serverPath = `http://localhost:${PORT}`;
 
 /**
- *
- * Fetches a crossword from the server.
- *
+ * Fetches a crossword from the server. Returns a FECrossword object, no answers.
  */
 export const getCrossword = async (): Promise<FECrossword> => {
   console.log("getCrossword called");
@@ -17,13 +15,8 @@ export const getCrossword = async (): Promise<FECrossword> => {
       "Content-Type": "application/json",
     },
   });
-  //
-  // Update this to actually return a crossword
-  //
   const json = await response.json();
-  console.log("The server response was (message):", json.message);
-  console.log("The server response was:", json.crossword);
-  return json.crossword; // unusued here
+  return json.crossword;
 };
 
 /**
