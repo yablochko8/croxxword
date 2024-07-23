@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import { testFECW } from "./generator/generator";
+
 export const PORT = 4101;
 
 const app = express();
@@ -11,6 +13,11 @@ app.use(cors());
 app.get("/", async (req, res) => {
   console.log("GET endpoint called.");
   res.json({ message: "Hello from the server" });
+});
+
+app.get("/api/crossword/latest", async (req, res) => {
+  console.log("GET endpoint called.");
+  res.json({ crossword: testFECW });
 });
 
 const storedValues: string[] = [];

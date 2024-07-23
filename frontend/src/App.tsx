@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
 import { expandEvaluation } from "./services/expandEvaluation";
-import { exampleAuthor, exampleCrossWord } from "../../shared/examples";
+import { exampleAuthor } from "../../shared/examples";
 import { useController } from "./services/useController";
+import { getCrossword } from "./services/serverCalls";
+import { FECrossword } from "../../shared/types";
 
 const currentUser = exampleAuthor
 
@@ -16,7 +18,20 @@ function App() {
 
   const { gridDisplay, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
 
+  const [crossword, setCrossword] = useState<FECrossword | null>(null)
+
+  useEffect(() => {
+    const fetchCrossword = async () => {
+      const crossword = await getCrossword();
+      setCrossword(crossword)
+      console.log("Fetched crossword:", crossword);
+    };
+
+    fetchCrossword();
+  }, []);
+
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
+
 
   return (
     <>
@@ -24,8 +39,11 @@ function App() {
 
 
         <div>Welcome {currentUser.name}</div>
+
         <div>Crossword # {crosswordId}</div>
-        <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} onInput={changeLetter} />
+        {crossword &&
+          <ShowCrossword gridDisplay={gridDisplay} clues={crossword.clues} onInput={changeLetter} />
+        }
 
 
         <button
