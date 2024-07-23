@@ -78,7 +78,7 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
                     <input
                         type="text"
                         maxLength={1}
-                        className={`w-full h-full text-center ${tileColor}`}
+                        className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={handleInputChange}
                         ref={inputRef}
