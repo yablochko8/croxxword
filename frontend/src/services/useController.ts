@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Results, GridDisplay, FECrossword } from "../../../shared/types";
-import { emptyFEGridDisplay, exampleResults } from "../../../shared/examples";
+import { emptyFEGridDisplay } from "../../../shared/examples";
 import { checkGuesses, getCrossword } from "./serverCalls";
 import { buildGrid } from "./buildGrid";
-// import { checkGuesses } from "./serverCalls";
 
 export const useController = (crosswordId: number, authorId: number) => {
   console.log("To do: use these...", crosswordId, authorId);
