@@ -137,3 +137,9 @@ export const emptyFEGridDisplay = {
   guesses: emptyAlphaGrid,
   evaluation: emptyBoolGrid,
 };
+
+export const emptyCrossword: FECrossword = {
+  id: 404,
+  name: "Error",
+  clues: [],
+};
