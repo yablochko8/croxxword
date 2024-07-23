@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Results, GridDisplay, FECrossword } from "../../../shared/types";
-import { exampleFEGridDisplay, exampleResults } from "../../../shared/examples";
+import { emptyFEGridDisplay, exampleResults } from "../../../shared/examples";
 import { getCrossword } from "./serverCalls";
+import { gridBuilder } from "./buildGrid";
 // import { checkGuesses } from "./serverCalls";
 
 export const useController = (crosswordId: number, authorId: number) => {
   console.log("To do: use these...", crosswordId, authorId);
-  const [gridDisplay, setGridDisplay] = useState<GridDisplay>(
-    structuredClone(exampleFEGridDisplay)
-  );
+  const [gridDisplay, setGridDisplay] =
+    useState<GridDisplay>(emptyFEGridDisplay);
 
   const [crossword, setCrossword] = useState<FECrossword | null>(null);
 
@@ -16,6 +16,7 @@ export const useController = (crosswordId: number, authorId: number) => {
     const fetchCrossword = async () => {
       const crossword = await getCrossword();
       setCrossword(crossword);
+      setGridDisplay(gridBuilder(crossword));
       console.log("Fetched crossword:", crossword);
     };
 

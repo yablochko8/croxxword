@@ -128,3 +128,12 @@ export const exampleResults = {
   wrongLetters: 1,
   evaluationGrid: exampleEvaluation,
 };
+
+const emptyBoolGrid: BoolGrid = Array(8).fill(Array(8).fill(true));
+const emptyAlphaGrid: AlphaGrid = Array(8).fill(Array(8).fill(""));
+
+export const emptyFEGridDisplay = {
+  tiles: emptyBoolGrid,
+  guesses: emptyAlphaGrid,
+  evaluation: emptyBoolGrid,
+};
