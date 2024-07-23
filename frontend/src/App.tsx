@@ -16,19 +16,9 @@ const crosswordId = 123
 function App() {
 
 
-  const { gridDisplay, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
+  const { gridDisplay, clues, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
 
-  const [crossword, setCrossword] = useState<FECrossword | null>(null)
 
-  useEffect(() => {
-    const fetchCrossword = async () => {
-      const crossword = await getCrossword();
-      setCrossword(crossword)
-      console.log("Fetched crossword:", crossword);
-    };
-
-    fetchCrossword();
-  }, []);
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
 
@@ -41,9 +31,9 @@ function App() {
         <div>Welcome {currentUser.name}</div>
 
         <div>Crossword # {crosswordId}</div>
-        {crossword &&
-          <ShowCrossword gridDisplay={gridDisplay} clues={crossword.clues} onInput={changeLetter} />
-        }
+
+        <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} />
+
 
 
         <button
