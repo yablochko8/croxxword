@@ -4,6 +4,7 @@ import { exampleFEGridDisplay, exampleResults } from "../../../shared/examples";
 // import { checkGuesses } from "./serverCalls";
 
 export const useController = (crosswordId: number, authorId: number) => {
+  console.log("To do: use these...", crosswordId, authorId);
   const [gridDisplay, setGridDisplay] = useState<GridDisplay>(
     structuredClone(exampleFEGridDisplay)
   );

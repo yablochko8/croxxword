@@ -1,9 +1,4 @@
-import {
-  AlphaGrid,
-  Results,
-  GridDisplay,
-  FECrossword,
-} from "../../../shared/types";
+import { Results, GridDisplay, FECrossword } from "../../../shared/types";
 
 export const PORT = 4101; // change this to an import before doing anything serious
 
