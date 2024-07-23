@@ -1,11 +1,4 @@
-import {
-  AlphaGrid,
-  Author,
-  BEClue,
-  BoolGrid,
-  FEClue,
-  FECrossword,
-} from "./types";
+import { AlphaGrid, Author, BoolGrid, FEClue, FECrossword } from "./types";
 
 export const exampleAuthor: Author = {
   id: 999,
@@ -21,14 +14,14 @@ const exampleClue1: FEClue = {
   answerLength: [6],
 };
 
-const exampleClue1BE: BEClue = {
-  hint: "Train dear is soft on the soles",
-  isRow: true,
-  rowStart: 1,
-  colStart: 0,
-  author: exampleAuthor,
-  answer: "CARPET",
-};
+// const exampleClue1BE: BEClue = {
+//   hint: "Train dear is soft on the soles",
+//   isRow: true,
+//   rowStart: 1,
+//   colStart: 0,
+//   author: exampleAuthor,
+//   answer: "CARPET",
+// };
 const exampleClue2: FEClue = {
   hint: "Boast without the alien, still a boast",
   isRow: false,
@@ -38,14 +31,14 @@ const exampleClue2: FEClue = {
   answerLength: [5],
 };
 
-const exampleClue2BE: BEClue = {
-  hint: "Boast without the alien, still a boast",
-  isRow: false,
-  rowStart: 1,
-  colStart: 5,
-  author: exampleAuthor,
-  answer: "TRUMP",
-};
+// const exampleClue2BE: BEClue = {
+//   hint: "Boast without the alien, still a boast",
+//   isRow: false,
+//   rowStart: 1,
+//   colStart: 5,
+//   author: exampleAuthor,
+//   answer: "TRUMP",
+// };
 
 const exampleClue3: FEClue = {
   hint: "Me me at the beach on the West Coast.",
@@ -56,14 +49,14 @@ const exampleClue3: FEClue = {
   answerLength: [3, 5],
 };
 
-const exampleClue3BE: BEClue = {
-  hint: "Me me at the beach on the West Coast.",
-  isRow: false,
-  rowStart: 0,
-  colStart: 1,
-  author: exampleAuthor,
-  answer: "SAN DIEGO",
-};
+// const exampleClue3BE: BEClue = {
+//   hint: "Me me at the beach on the West Coast.",
+//   isRow: false,
+//   rowStart: 0,
+//   colStart: 1,
+//   author: exampleAuthor,
+//   answer: "SAN DIEGO",
+// };
 
 export const exampleCrossWord: FECrossword = {
   id: 123,
@@ -82,16 +75,16 @@ const exampleTiles: BoolGrid = [
   [true, true, true, true, true, true, true, false],
 ];
 
-const exampleGuess: AlphaGrid = [
-  ["", "S", "", "", "", "", "", ""],
-  ["C", "A", "R", "P", "E", "T", "", ""],
-  ["", "N", "", "", "", "", "R", ""],
-  ["", "D", "", "", "", "", "U", ""],
-  ["", "I", "", "", "", "", "M", ""],
-  ["", "E", "", "", "", "", "P", ""],
-  ["", "G", "", "", "", "", "", ""],
-  ["", "O", "", "", "", "", "", ""],
-];
+// const exampleGuess: AlphaGrid = [
+//   ["", "S", "", "", "", "", "", ""],
+//   ["C", "A", "R", "P", "E", "T", "", ""],
+//   ["", "N", "", "", "", "", "R", ""],
+//   ["", "D", "", "", "", "", "U", ""],
+//   ["", "I", "", "", "", "", "M", ""],
+//   ["", "E", "", "", "", "", "P", ""],
+//   ["", "G", "", "", "", "", "", ""],
+//   ["", "O", "", "", "", "", "", ""],
+// ];
 
 export const exampleGuess2: AlphaGrid = [
   ["P", "A", "R", "I", "S", "", "J", ""],
@@ -127,4 +120,19 @@ export const exampleResults = {
   correctLetters: 10,
   wrongLetters: 1,
   evaluationGrid: exampleEvaluation,
+};
+
+const emptyBoolGrid: BoolGrid = Array(8).fill(Array(8).fill(true));
+const emptyAlphaGrid: AlphaGrid = Array(8).fill(Array(8).fill(""));
+
+export const emptyFEGridDisplay = {
+  tiles: emptyBoolGrid,
+  guesses: emptyAlphaGrid,
+  evaluation: emptyBoolGrid,
+};
+
+export const emptyCrossword: FECrossword = {
+  id: 404,
+  name: "Error",
+  clues: [],
 };

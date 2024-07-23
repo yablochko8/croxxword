@@ -1,5 +1,4 @@
-import { FECrossword, BoolGrid, FEClue, AlphaGrid, GridDisplay, ClueDisplay } from "../../../shared/types"
-import React from "react";
+import { BoolGrid, FEClue, GridDisplay } from "../../../shared/types"
 
 
 

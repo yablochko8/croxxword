@@ -1,8 +1,7 @@
-import React, { useState } from "react";
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
 import { expandEvaluation } from "./services/expandEvaluation";
-import { exampleAuthor, exampleCrossWord } from "../../shared/examples";
+import { exampleAuthor } from "../../shared/examples";
 import { useController } from "./services/useController";
 
 const currentUser = exampleAuthor
@@ -14,9 +13,12 @@ const crosswordId = 123
 function App() {
 
 
-  const { gridDisplay, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
+  const { gridDisplay, clues, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
+
+
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
+
 
   return (
     <>
@@ -24,8 +26,11 @@ function App() {
 
 
         <div>Welcome {currentUser.name}</div>
+
         <div>Crossword # {crosswordId}</div>
-        <ShowCrossword gridDisplay={gridDisplay} clues={exampleCrossWord.clues} onInput={changeLetter} />
+
+        <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} />
+
 
 
         <button

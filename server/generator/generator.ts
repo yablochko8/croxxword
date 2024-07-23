@@ -2,6 +2,7 @@ import { exampleAuthor } from "../../shared/examples";
 import { AlphaGrid, BEClue, BECrossword, BankClue } from "../../shared/types";
 import { clueBank } from "./clueBank";
 import { alphaGridGenerator } from "./gridGenerator";
+import { stripAnswers } from "./processors";
 
 const templateCW: BECrossword = {
   id: 456,
@@ -202,3 +203,5 @@ export const testNewGrid = buildAnswerGrid(testNewCW);
 
 console.log(testNewCW);
 console.log(testNewGrid);
+
+export const testFECW = stripAnswers(testNewCW);
