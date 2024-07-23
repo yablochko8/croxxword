@@ -197,11 +197,11 @@ const tryAddClueToGrid = (
   return answerGrid;
 };
 
-const testNewCW = generateNewCW();
+export const testBECW = generateNewCW();
 
-export const testNewGrid = buildAnswerGrid(testNewCW);
+export const testNewGrid = buildAnswerGrid(testBECW);
 
-console.log(testNewCW);
+console.log(testBECW);
 console.log(testNewGrid);
 
-export const testFECW = stripAnswers(testNewCW);
+export const testFECW = stripAnswers(testBECW);
