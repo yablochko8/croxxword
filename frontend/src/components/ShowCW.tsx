@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react"
 import { BoolGrid, FEClue, GridDisplay } from "../../../shared/types"
 
 
@@ -7,7 +8,7 @@ import { BoolGrid, FEClue, GridDisplay } from "../../../shared/types"
 const bgColor = "bg-zinc-900"
 const flexRow = `flex flex-row justify-center ${bgColor}`
 const flexCol = `flex flex-col justify-center ${bgColor}`
-const cellStylesCommon = "flex flex-col rounded-sm w-5 h-5"
+const cellStylesCommon = "flex flex-col rounded-sm w-8 h-8"
 const inputCell = `${cellStylesCommon} bg-white border border-gray-500`
 const blankCell = `${cellStylesCommon} ${bgColor}`
 
@@ -21,7 +22,7 @@ const clueHint = "text-sm text-zinc-900"
  * - clues
  * @returns JSX.Element
  */
-export const ShowCrossword = ({ gridDisplay, clues, onInput }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void }): JSX.Element => {
+export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void, showResults: boolean }): JSX.Element => {
 
 
     type TileProps = {
@@ -29,25 +30,58 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput }: { gridDisplay: Gr
         rowNum: number;
         colNum: number;
     }
+    const inputRefs = useRef<(HTMLInputElement | null)[][]>([]);
 
     /**
      * Show an individual tile
      */
     const Tile = (props: TileProps): JSX.Element => {
         const { isInteractive, rowNum, colNum } = props
+        const inputRef = useRef<HTMLInputElement>(null);
+
+        useEffect(() => {
+            if (!inputRefs.current[rowNum]) {
+                inputRefs.current[rowNum] = [];
+            }
+            inputRefs.current[rowNum][colNum] = inputRef.current;
+        }, [inputRef, rowNum, colNum]);
+
+        const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value.toUpperCase();
+            onInput(value, rowNum, colNum);
+
+            if (value) {
+                const nextCol = colNum + 1;
+                setTimeout(() => {
+                    if (inputRefs.current[rowNum] && inputRefs.current[rowNum][nextCol]) {
+                        console.log(`Focusing on inputRefs[${rowNum}][${nextCol}]`);
+                        inputRefs.current[rowNum][nextCol]?.focus();
+                    } else if (inputRefs.current[rowNum + 1] && inputRefs.current[rowNum + 1][0]) {
+                        console.log(`Focusing on inputRefs[${rowNum + 1}][0]`);
+                        inputRefs.current[rowNum + 1][0]?.focus();
+                    }
+                }, 0);
+            }
+        };
 
         const tileStyle = isInteractive ? inputCell : blankCell
+
+        const isCorrect = gridDisplay.evaluation[rowNum][colNum];
+        const tileColor = isInteractive
+            ? `${inputCell} ${showResults ? (isCorrect ? 'bg-green-500' : gridDisplay.guesses[rowNum][colNum] ? 'bg-red-500' : '') : ''}`
+            : blankCell;
+
+
         return (
             <div className={tileStyle} >
                 {isInteractive ? (
                     <input
                         type="text"
                         maxLength={1}
-                        className="w-full h-full text-center"
+                        className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
-                        onChange={(e) => onInput(e.target.value.toUpperCase(), rowNum, colNum)
-                        }
-
+                        onChange={handleInputChange}
+                        ref={inputRef}
                     />
                 ) : (
                     <div />

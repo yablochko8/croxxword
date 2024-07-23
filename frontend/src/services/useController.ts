@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Results, GridDisplay, FECrossword } from "../../../shared/types";
-import { emptyFEGridDisplay, exampleResults } from "../../../shared/examples";
-import { getCrossword } from "./serverCalls";
+import { emptyFEGridDisplay } from "../../../shared/examples";
+import { checkGuesses, getCrossword } from "./serverCalls";
 import { buildGrid } from "./buildGrid";
-// import { checkGuesses } from "./serverCalls";
 
 export const useController = (crosswordId: number, authorId: number) => {
   console.log("To do: use these...", crosswordId, authorId);
@@ -40,13 +39,23 @@ export const useController = (crosswordId: number, authorId: number) => {
   /**
    * Sends user's guesses to the server to check if they are correct.
    */
-  const onClickCheck = async () => {
-    console.log("Checking the server now (not really)");
-    // something something gridDisplay.evaluation
-    setResults(exampleResults);
+  const handleGuessCheck = async () => {
+    console.log("Checking the server now (for real)");
+    const newResults = await checkGuesses(crosswordId, gridDisplay);
+    setResults(newResults);
+    setGridDisplay((prevGridDisplay) => ({
+      ...prevGridDisplay,
+      evaluation: newResults.evaluationGrid,
+    }));
   };
 
   const clues = crossword ? crossword.clues : [];
 
-  return { gridDisplay, clues, results, changeLetter, onClickCheck };
+  return {
+    gridDisplay,
+    clues,
+    results,
+    changeLetter,
+    handleGuessCheck,
+  };
 };

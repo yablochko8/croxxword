@@ -13,7 +13,7 @@ const crosswordId = 123
 function App() {
 
 
-  const { gridDisplay, clues, onClickCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
+  const { gridDisplay, clues, handleGuessCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
 
 
 
@@ -29,12 +29,12 @@ function App() {
 
         <div>Crossword # {crosswordId}</div>
 
-        <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} />
+        <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} showResults={!!results} />
 
 
 
         <button
-          onClick={() => onClickCheck()}
+          onClick={() => handleGuessCheck()}
           className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg m-5"
         >
           Check Answers

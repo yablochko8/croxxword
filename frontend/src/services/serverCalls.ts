@@ -43,20 +43,22 @@ export const getCrossword = async (): Promise<FECrossword> => {
  *
  */
 export const checkGuesses = async (
-  gridDisplay: GridDisplay,
-  callbackFn: Function
+  crosswordId: number,
+  gridDisplay: GridDisplay
 ) => {
   const guesses = gridDisplay.guesses;
-  const response = await fetch(`${serverPath}/newmessage`, {
-    method: "POST",
-    body: JSON.stringify({ guesses }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await fetch(
+    `${serverPath}/api/crossword/check/${crosswordId}`,
+    {
+      method: "POST",
+      body: JSON.stringify({ guesses }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   const json = await response.json();
-  const updatedMessages: Results = json.messages;
-  console.log("The server response was:", updatedMessages);
-  callbackFn(updatedMessages);
-  return json.messages; // unused here
+  const results: Results = json.results;
+  console.log("The server response was:", results);
+  return results; // unused here
 };

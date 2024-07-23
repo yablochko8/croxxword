@@ -122,7 +122,7 @@ export const exampleResults = {
   evaluationGrid: exampleEvaluation,
 };
 
-const emptyBoolGrid: BoolGrid = Array(8).fill(Array(8).fill(true));
+const emptyBoolGrid: BoolGrid = Array(8).fill(Array(8).fill(false));
 const emptyAlphaGrid: AlphaGrid = Array(8).fill(Array(8).fill(""));
 
 export const emptyFEGridDisplay = {
