@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
 import { expandEvaluation } from "./services/expandEvaluation";
 import { exampleAuthor } from "../../shared/examples";
 import { useController } from "./services/useController";
-import { getCrossword } from "./services/serverCalls";
-import { FECrossword } from "../../shared/types";
 
 const currentUser = exampleAuthor
 
