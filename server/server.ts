@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import { testFECW } from "./generator/generator";
+import { getResults } from "./generator/processors";
 
 export const PORT = 4101;
 
@@ -18,6 +19,17 @@ app.get("/", async (req, res) => {
 app.get("/api/crossword/latest", async (req, res) => {
   console.log("GET endpoint called.");
   res.json({ crossword: testFECW });
+});
+
+app.post("/api/crossword/check/:id", async (req, res) => {
+  const crosswordId = Number(req.params.id);
+  console.log(
+    "/crossword/check/ POST endpoint called for Crossword ID:",
+    crosswordId
+  );
+  const { guesses } = req.body;
+  const results = getResults(crosswordId, guesses);
+  res.json({ results });
 });
 
 const storedValues: string[] = [];

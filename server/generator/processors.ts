@@ -1,4 +1,10 @@
-import { BECrossword, FECrossword } from "../../shared/types";
+import {
+  AlphaGrid,
+  BECrossword,
+  BoolGrid,
+  FECrossword,
+  Results,
+} from "../../shared/types";
 
 export const stripAnswers = (be: BECrossword): FECrossword => {
   const feClues = be.clues.map((clue) => {
@@ -14,4 +20,19 @@ export const stripAnswers = (be: BECrossword): FECrossword => {
     name: be.name,
     clues: feClues,
   };
+};
+
+export const getResults = (cwid: number, guesses: AlphaGrid): Results => {
+  console.log("getResults called");
+  const dummyCorrectness = cwid === 100;
+
+  const dummyResult: Results = {
+    correctWords: 0,
+    wrongWords: 0,
+    correctLetters: 0,
+    wrongLetters: 0,
+    evaluationGrid: guesses.map((row) => row.map(() => dummyCorrectness)),
+  };
+
+  return dummyResult;
 };
