@@ -4,28 +4,11 @@ import { clueBank } from "./clueBank";
 import { alphaGridGenerator } from "./gridGenerator";
 import { stripAnswers } from "./processors";
 
-const templateCW: BECrossword = {
-  id: 456,
-  name: "new crossword yo",
-  clues: [],
-};
-
-const exampleClue3BE: BEClue = {
-  hint: "Me me at the beach on the West Coast.",
-  isRow: false,
-  rowStart: 0,
-  colStart: 1,
-  author: exampleAuthor,
-  answer: "SAN DIEGO",
-};
-
 /**
- *
  * This is the master query. It makes a few compromises right now:
  *
  * Only populates in rows and cols with odd numbers.
  * Could have adjacency between col-row mixes. E.g. A 4-letter column clue will not stop a row clue from appearing in the 5th row.
- *
  */
 export const generateNewCW = (): BECrossword => {
   let clues: BEClue[] = [];
@@ -34,8 +17,8 @@ export const generateNewCW = (): BECrossword => {
   let colsWithClues: number[] = [];
   let clueWordsAdded: string[] = [];
 
-  for (let rowNum = 0; rowNum < 8; rowNum += 2) {
-    for (let colNum = 0; colNum < 8; colNum += 2) {
+  for (let rowNum = 0; rowNum < 8; rowNum += 1) {
+    for (let colNum = 0; colNum < 8; colNum += 1) {
       for (let i = 0; i < clueBank.length; i++) {
         const bankClue = clueBank[i];
         if (clueWordsAdded.includes(bankClue.answer)) {
@@ -66,7 +49,6 @@ export const generateNewCW = (): BECrossword => {
             }
           }
 
-          console.log("YES checking COL here");
           // STEP TWO - see if this CLUE fits on this TILE as a COL
 
           if (
@@ -153,6 +135,7 @@ const buildAnswerGrid = (source: BECrossword): null | AlphaGrid => {
   return answerGrid;
 };
 
+/** Checks if a clue can be added to a specific grid position. */
 const tryAddClueToGrid = (
   targetGrid: AlphaGrid,
   bankClue: BankClue,
@@ -171,26 +154,102 @@ const tryAddClueToGrid = (
 
   // Remove all spaces from the answer
   const squashedClue = bankClue.answer.replace(/\s+/g, "");
+
+  // Check if the answer is too long for the grid
+  if (isRow) {
+    if (squashedClue.length + colStart >= answerGrid.length) {
+      return null;
+    }
+  } else {
+    if (squashedClue.length + rowStart >= answerGrid[0].length) {
+      return null;
+    }
+  }
+
+  // Check if the tile immediately before or after the clue is already occupied
+  const clueEndHitsBorder = isRow
+    ? colStart + squashedClue.length === answerGrid.length
+    : rowStart + squashedClue.length === answerGrid[0].length;
+  if (isRow) {
+    if (
+      (colStart > 0 && answerGrid[rowStart][colStart - 1]) ||
+      (!clueEndHitsBorder &&
+        answerGrid[rowStart][colStart + squashedClue.length])
+    ) {
+      return null;
+    }
+  } else {
+    if (
+      (rowStart > 0 && answerGrid[rowStart - 1][colStart]) ||
+      (!clueEndHitsBorder &&
+        answerGrid[rowStart + squashedClue.length][colStart])
+    ) {
+      return null;
+    }
+  }
+
   // Add the answer to the grid
   for (let i = 0; i < squashedClue.length; i++) {
     if (isRow) {
+      // Check if word overlaps with another word with a non-matching letter
       if (
-        colStart + i >= answerGrid[rowStart].length ||
-        (answerGrid[rowStart][colStart + i] &&
-          answerGrid[rowStart][colStart + i] !== bankClue.answer[i])
+        answerGrid[rowStart][colStart + i] &&
+        answerGrid[rowStart][colStart + i] !== bankClue.answer[i]
       ) {
-        // If adding a letter to a Tile involves changing that letter or expanding the grid, this clue can't go here!
         return null;
       }
+
+      // For clues not part of a full overlap
+      // Check if there is a letter above (while not checking the first row)
+      if (
+        !answerGrid[rowStart][colStart + i] &&
+        rowStart > 0 &&
+        answerGrid[rowStart - 1][colStart + i]
+      ) {
+        return null;
+      }
+
+      // For clues not part of a full overlap
+      // Check if there is a letter below (while not checking the last row)
+      if (
+        !answerGrid[rowStart][colStart + i] &&
+        rowStart < answerGrid.length - 1 &&
+        answerGrid[rowStart + 1][colStart + i]
+      ) {
+        return null;
+      }
+
+      // Based on current population method, no need to check the cell below
+
+      // If the above trigger conditions are not met then we can add it to the grid
       answerGrid[rowStart][colStart + i] = bankClue.answer[i];
     } else {
+      // COL CLUES - same logic as above transposed
       if (
-        rowStart + i >= answerGrid.length ||
-        (answerGrid[rowStart + i][colStart] &&
-          answerGrid[rowStart + i][colStart] !== bankClue.answer[i])
+        answerGrid[rowStart + i][colStart] &&
+        answerGrid[rowStart + i][colStart] !== bankClue.answer[i]
       ) {
         return null;
       }
+      // For clues not part of a full overlap
+      // Check if there is a letter to the left (while not checking the first column)
+      if (
+        !answerGrid[rowStart + i][colStart] &&
+        colStart > 0 &&
+        answerGrid[rowStart + i][colStart - 1]
+      ) {
+        return null;
+      }
+      // For clues not part of a full overlap
+      // Check if there is a letter to the right (while not checking the last column)
+      if (
+        !answerGrid[rowStart + i][colStart] &&
+        colStart < answerGrid[0].length - 1 &&
+        answerGrid[rowStart + i][colStart + 1]
+      ) {
+        return null;
+      }
+
       answerGrid[rowStart + i][colStart] = bankClue.answer[i];
     }
   }
@@ -201,7 +260,16 @@ export const testBECW = generateNewCW();
 
 export const testNewGrid = buildAnswerGrid(testBECW);
 
+const printGridToConsole = (grid: AlphaGrid | null) => {
+  if (grid) {
+    for (const row of grid) {
+      console.log(row);
+    }
+  }
+};
+
 console.log(testBECW);
-console.log(testNewGrid);
+
+printGridToConsole(testNewGrid);
 
 export const testFECW = stripAnswers(testBECW);

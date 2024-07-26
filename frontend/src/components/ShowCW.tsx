@@ -24,7 +24,6 @@ const clueHint = "text-sm text-zinc-900"
  */
 export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void, showResults: boolean }): JSX.Element => {
 
-
     type TileProps = {
         isInteractive: boolean;
         rowNum: number;
@@ -52,13 +51,14 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
 
             if (value) {
                 const nextCol = colNum + 1;
+                const nextRow = rowNum + 1;
                 setTimeout(() => {
                     if (inputRefs.current[rowNum] && inputRefs.current[rowNum][nextCol]) {
                         console.log(`Focusing on inputRefs[${rowNum}][${nextCol}]`);
                         inputRefs.current[rowNum][nextCol]?.focus();
-                    } else if (inputRefs.current[rowNum + 1] && inputRefs.current[rowNum + 1][0]) {
-                        console.log(`Focusing on inputRefs[${rowNum + 1}][0]`);
-                        inputRefs.current[rowNum + 1][0]?.focus();
+                    } else if (inputRefs.current[nextRow] && inputRefs.current[nextRow][colNum]) {
+                        console.log(`Focusing on inputRefs[${nextRow}][${colNum}]`);
+                        inputRefs.current[nextRow][colNum]?.focus();
                     }
                 }, 0);
             }
@@ -78,7 +78,7 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
                     <input
                         type="text"
                         maxLength={1}
-                        className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300`}
+                        className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300 hover:bg-yellow-100 cursor-pointer`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={handleInputChange}
                         ref={inputRef}

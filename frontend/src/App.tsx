@@ -8,14 +8,9 @@ const currentUser = exampleAuthor
 
 const crosswordId = 123
 
-
-
 function App() {
 
-
   const { gridDisplay, clues, handleGuessCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
-
-
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
 
@@ -23,7 +18,6 @@ function App() {
   return (
     <>
       <div className="min-h-screen">
-
 
         <div>Welcome {currentUser.name}</div>
 
