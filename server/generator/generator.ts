@@ -169,23 +169,43 @@ const tryAddClueToGrid = (
 
   // Add the answer to the grid
   for (let i = 0; i < squashedClue.length; i++) {
-    //
     if (isRow) {
+      // Check if word overlaps with another word with a non-matching letter
       if (
-        // ROW CLUES
-        // Check if word overlaps with another word with a non-matching letter
         answerGrid[rowStart][colStart + i] &&
         answerGrid[rowStart][colStart + i] !== bankClue.answer[i]
       ) {
-        // If the above trigger conditions are not met then we can add it to the grid
         return null;
       }
+
+      // For clues not part of a full overlap
+      // Check if there is a letter above (while not checking the first row)
+      if (
+        !answerGrid[rowStart][colStart + i] &&
+        rowStart > 0 &&
+        answerGrid[rowStart - 1][colStart + i]
+      ) {
+        return null;
+      }
+
+      // Based on current population method, no need to check the cell below
+
+      // If the above trigger conditions are not met then we can add it to the grid
       answerGrid[rowStart][colStart + i] = bankClue.answer[i];
     } else {
       // COL CLUES - same logic as above transposed
       if (
         answerGrid[rowStart + i][colStart] &&
         answerGrid[rowStart + i][colStart] !== bankClue.answer[i]
+      ) {
+        return null;
+      }
+      // For clues not part of a full overlap
+      // Check if there is a letter to the left (while not checking the first column)
+      if (
+        !answerGrid[rowStart + i][colStart] &&
+        colStart > 0 &&
+        answerGrid[rowStart + i][colStart - 1]
       ) {
         return null;
       }
