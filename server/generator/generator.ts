@@ -158,11 +158,11 @@ const tryAddClueToGrid = (
 
   // Check if the answer is too long for the grid
   if (isRow) {
-    if (squashedClue.length + rowStart > answerGrid.length) {
+    if (squashedClue.length + colStart >= answerGrid.length) {
       return null;
     }
   } else {
-    if (squashedClue.length + colStart > answerGrid[0].length) {
+    if (squashedClue.length + rowStart >= answerGrid[0].length) {
       return null;
     }
   }
@@ -173,12 +173,9 @@ const tryAddClueToGrid = (
     if (isRow) {
       if (
         // ROW CLUES
-
-        // Check if word will expand the grid
-        colStart + i >= answerGrid[rowStart].length ||
         // Check if word overlaps with another word with a non-matching letter
-        (answerGrid[rowStart][colStart + i] &&
-          answerGrid[rowStart][colStart + i] !== bankClue.answer[i])
+        answerGrid[rowStart][colStart + i] &&
+        answerGrid[rowStart][colStart + i] !== bankClue.answer[i]
       ) {
         // If the above trigger conditions are not met then we can add it to the grid
         return null;
@@ -187,9 +184,8 @@ const tryAddClueToGrid = (
     } else {
       // COL CLUES - same logic as above transposed
       if (
-        rowStart + i >= answerGrid.length ||
-        (answerGrid[rowStart + i][colStart] &&
-          answerGrid[rowStart + i][colStart] !== bankClue.answer[i])
+        answerGrid[rowStart + i][colStart] &&
+        answerGrid[rowStart + i][colStart] !== bankClue.answer[i]
       ) {
         return null;
       }
