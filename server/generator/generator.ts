@@ -171,19 +171,26 @@ const tryAddClueToGrid = (
 
   // Remove all spaces from the answer
   const squashedClue = bankClue.answer.replace(/\s+/g, "");
+
   // Add the answer to the grid
   for (let i = 0; i < squashedClue.length; i++) {
+    //
     if (isRow) {
       if (
+        // ROW CLUES
+
+        // Check if word will expand the grid
         colStart + i >= answerGrid[rowStart].length ||
+        // Check if word overlaps with another word with a non-matching letter
         (answerGrid[rowStart][colStart + i] &&
           answerGrid[rowStart][colStart + i] !== bankClue.answer[i])
       ) {
-        // If adding a letter to a Tile involves changing that letter or expanding the grid, this clue can't go here!
+        // If the above trigger conditions are not met then we can add it to the grid
         return null;
       }
       answerGrid[rowStart][colStart + i] = bankClue.answer[i];
     } else {
+      // COL CLUES - same logic as above transposed
       if (
         rowStart + i >= answerGrid.length ||
         (answerGrid[rowStart + i][colStart] &&
@@ -201,7 +208,17 @@ export const testBECW = generateNewCW();
 
 export const testNewGrid = buildAnswerGrid(testBECW);
 
+const printGridToConsole = (grid: AlphaGrid | null) => {
+  if (grid) {
+    for (const row of grid) {
+      console.log(row);
+    }
+  }
+};
+
 console.log(testBECW);
 console.log(testNewGrid);
+
+printGridToConsole(testNewGrid);
 
 export const testFECW = stripAnswers(testBECW);
