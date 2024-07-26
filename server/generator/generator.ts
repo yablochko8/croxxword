@@ -228,7 +228,6 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
 };
 
 console.log(testBECW);
-console.log(testNewGrid);
 
 printGridToConsole(testNewGrid);
 

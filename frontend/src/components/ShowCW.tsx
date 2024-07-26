@@ -24,7 +24,6 @@ const clueHint = "text-sm text-zinc-900"
  */
 export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void, showResults: boolean }): JSX.Element => {
 
-
     type TileProps = {
         isInteractive: boolean;
         rowNum: number;
@@ -78,7 +77,7 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
                     <input
                         type="text"
                         maxLength={1}
-                        className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300`}
+                        className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300 hover:bg-yellow-100 cursor-pointer`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={handleInputChange}
                         ref={inputRef}
