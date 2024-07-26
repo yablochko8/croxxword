@@ -8,7 +8,7 @@ import { BoolGrid, FEClue, GridDisplay } from "../../../shared/types"
 const bgColor = "bg-zinc-900"
 const flexRow = `flex flex-row justify-center ${bgColor}`
 const flexCol = `flex flex-col justify-center ${bgColor}`
-const cellStylesCommon = "flex flex-col rounded-sm w-8 h-8"
+const cellStylesCommon = "flex flex-col rounded-sm w-10 h-10"
 const inputCell = `${cellStylesCommon} bg-white border border-gray-500`
 const blankCell = `${cellStylesCommon} ${bgColor}`
 
