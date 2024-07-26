@@ -51,13 +51,14 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
 
             if (value) {
                 const nextCol = colNum + 1;
+                const nextRow = rowNum + 1;
                 setTimeout(() => {
                     if (inputRefs.current[rowNum] && inputRefs.current[rowNum][nextCol]) {
                         console.log(`Focusing on inputRefs[${rowNum}][${nextCol}]`);
                         inputRefs.current[rowNum][nextCol]?.focus();
-                    } else if (inputRefs.current[rowNum + 1] && inputRefs.current[rowNum + 1][0]) {
-                        console.log(`Focusing on inputRefs[${rowNum + 1}][0]`);
-                        inputRefs.current[rowNum + 1][0]?.focus();
+                    } else if (inputRefs.current[nextRow] && inputRefs.current[nextRow][colNum]) {
+                        console.log(`Focusing on inputRefs[${nextRow}][${colNum}]`);
+                        inputRefs.current[nextRow][colNum]?.focus();
                     }
                 }, 0);
             }
