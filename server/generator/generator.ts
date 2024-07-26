@@ -4,28 +4,11 @@ import { clueBank } from "./clueBank";
 import { alphaGridGenerator } from "./gridGenerator";
 import { stripAnswers } from "./processors";
 
-const templateCW: BECrossword = {
-  id: 456,
-  name: "new crossword yo",
-  clues: [],
-};
-
-const exampleClue3BE: BEClue = {
-  hint: "Me me at the beach on the West Coast.",
-  isRow: false,
-  rowStart: 0,
-  colStart: 1,
-  author: exampleAuthor,
-  answer: "SAN DIEGO",
-};
-
 /**
- *
  * This is the master query. It makes a few compromises right now:
  *
  * Only populates in rows and cols with odd numbers.
  * Could have adjacency between col-row mixes. E.g. A 4-letter column clue will not stop a row clue from appearing in the 5th row.
- *
  */
 export const generateNewCW = (): BECrossword => {
   let clues: BEClue[] = [];
@@ -153,6 +136,7 @@ const buildAnswerGrid = (source: BECrossword): null | AlphaGrid => {
   return answerGrid;
 };
 
+/** Checks if a clue can be added to a specific grid position. */
 const tryAddClueToGrid = (
   targetGrid: AlphaGrid,
   bankClue: BankClue,
@@ -171,6 +155,17 @@ const tryAddClueToGrid = (
 
   // Remove all spaces from the answer
   const squashedClue = bankClue.answer.replace(/\s+/g, "");
+
+  // Check if the answer is too long for the grid
+  if (isRow) {
+    if (squashedClue.length + rowStart > answerGrid.length) {
+      return null;
+    }
+  } else {
+    if (squashedClue.length + colStart > answerGrid[0].length) {
+      return null;
+    }
+  }
 
   // Add the answer to the grid
   for (let i = 0; i < squashedClue.length; i++) {
