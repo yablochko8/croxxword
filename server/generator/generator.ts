@@ -17,8 +17,8 @@ export const generateNewCW = (): BECrossword => {
   let colsWithClues: number[] = [];
   let clueWordsAdded: string[] = [];
 
-  for (let rowNum = 0; rowNum < 8; rowNum += 2) {
-    for (let colNum = 0; colNum < 8; colNum += 2) {
+  for (let rowNum = 0; rowNum < 8; rowNum += 1) {
+    for (let colNum = 0; colNum < 8; colNum += 1) {
       for (let i = 0; i < clueBank.length; i++) {
         const bankClue = clueBank[i];
         if (clueWordsAdded.includes(bankClue.answer)) {
@@ -49,7 +49,6 @@ export const generateNewCW = (): BECrossword => {
             }
           }
 
-          console.log("YES checking COL here");
           // STEP TWO - see if this CLUE fits on this TILE as a COL
 
           if (
@@ -167,6 +166,28 @@ const tryAddClueToGrid = (
     }
   }
 
+  // Check if the tile immediately before or after the clue is already occupied
+  const clueEndHitsBorder = isRow
+    ? colStart + squashedClue.length === answerGrid.length
+    : rowStart + squashedClue.length === answerGrid[0].length;
+  if (isRow) {
+    if (
+      (colStart > 0 && answerGrid[rowStart][colStart - 1]) ||
+      (!clueEndHitsBorder &&
+        answerGrid[rowStart][colStart + squashedClue.length])
+    ) {
+      return null;
+    }
+  } else {
+    if (
+      (rowStart > 0 && answerGrid[rowStart - 1][colStart]) ||
+      (!clueEndHitsBorder &&
+        answerGrid[rowStart + squashedClue.length][colStart])
+    ) {
+      return null;
+    }
+  }
+
   // Add the answer to the grid
   for (let i = 0; i < squashedClue.length; i++) {
     if (isRow) {
@@ -184,6 +205,16 @@ const tryAddClueToGrid = (
         !answerGrid[rowStart][colStart + i] &&
         rowStart > 0 &&
         answerGrid[rowStart - 1][colStart + i]
+      ) {
+        return null;
+      }
+
+      // For clues not part of a full overlap
+      // Check if there is a letter below (while not checking the last row)
+      if (
+        !answerGrid[rowStart][colStart + i] &&
+        rowStart < answerGrid.length - 1 &&
+        answerGrid[rowStart + 1][colStart + i]
       ) {
         return null;
       }
@@ -209,6 +240,16 @@ const tryAddClueToGrid = (
       ) {
         return null;
       }
+      // For clues not part of a full overlap
+      // Check if there is a letter to the right (while not checking the last column)
+      if (
+        !answerGrid[rowStart + i][colStart] &&
+        colStart < answerGrid[0].length - 1 &&
+        answerGrid[rowStart + i][colStart + 1]
+      ) {
+        return null;
+      }
+
       answerGrid[rowStart + i][colStart] = bankClue.answer[i];
     }
   }
