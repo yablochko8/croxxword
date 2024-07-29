@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { BoolGrid, FEClue, GridDisplay } from "../../../shared/types"
 
 
@@ -16,13 +16,24 @@ const clueSubtitle = "text-sm text-gray-500 mt-5"
 
 const clueHint = "text-sm text-zinc-900"
 
+
+type ShowCrosswordProps = {
+    gridDisplay: GridDisplay,
+    clues: FEClue[],
+    onInput: (letter: string, rowNum: number, colNum: number) => void,
+    showResults: boolean
+}
 /**
  * Takes in a CrossWord and shows it, including:
  * - interactive grid (made of Tiles)
  * - clues
- * @returns JSX.Element
  */
-export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gridDisplay: GridDisplay, clues: FEClue[], onInput: (letter: string, rowNum: number, colNum: number) => void, showResults: boolean }): JSX.Element => {
+export const ShowCrossword = ({
+    gridDisplay,
+    clues,
+    onInput,
+    showResults
+}: ShowCrosswordProps) => {
 
     type TileProps = {
         isInteractive: boolean;
@@ -30,6 +41,15 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
         colNum: number;
     }
     const inputRefs = useRef<(HTMLInputElement | null)[][]>([]);
+
+    const [activeClue, setActiveClue] = useState<{ row: number, col: number }>({ row: 0, col: 0 });
+
+    useEffect(() => {
+        const { row, col } = activeClue;
+        if (inputRefs.current[row] && inputRefs.current[row][col]) {
+            inputRefs.current[row][col]?.focus();
+        }
+    }, [activeClue]);
 
     /**
      * Show an individual tile
@@ -49,18 +69,16 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
             const value = e.target.value.toUpperCase();
             onInput(value, rowNum, colNum);
 
+
             if (value) {
                 const nextCol = colNum + 1;
                 const nextRow = rowNum + 1;
-                setTimeout(() => {
-                    if (inputRefs.current[rowNum] && inputRefs.current[rowNum][nextCol]) {
-                        console.log(`Focusing on inputRefs[${rowNum}][${nextCol}]`);
-                        inputRefs.current[rowNum][nextCol]?.focus();
-                    } else if (inputRefs.current[nextRow] && inputRefs.current[nextRow][colNum]) {
-                        console.log(`Focusing on inputRefs[${nextRow}][${colNum}]`);
-                        inputRefs.current[nextRow][colNum]?.focus();
-                    }
-                }, 0);
+
+                if (inputRefs.current[rowNum] && inputRefs.current[rowNum][nextCol]) {
+                    setActiveClue({ row: rowNum, col: nextCol });
+                } else if (inputRefs.current[nextRow] && inputRefs.current[nextRow][colNum]) {
+                    setActiveClue({ row: nextRow, col: colNum });
+                }
             }
         };
 
@@ -117,11 +135,14 @@ export const ShowCrossword = ({ gridDisplay, clues, onInput, showResults }: { gr
     const ClueSection = ({ clues }: { clues: FEClue[] }): JSX.Element => {
         return (
             <div className="clue-list">
-                {clues.map((clue, index) => (
-                    <div key={index} className={clueHint}>
-                        {clue.hint} ({clue.answerLength.join(", ")})
-                    </div>
-                ))}
+                {clues.map((clue, index) => {
+                    const isActive = clue.isRow ? activeClue.row === clue.rowStart : activeClue.col === clue.colStart
+                    return (
+                        <div key={index} className={`${clueHint} ${isActive ? 'bg-yellow-500' : ''}`}>
+                            {clue.hint} ({clue.answerLength.join(", ")})
+                        </div>
+                    )
+                })}
             </div>
         )
     }
