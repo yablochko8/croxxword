@@ -48,7 +48,11 @@ export const generateNewCW = (): BECrossword => {
               clueWordsAdded.push(bankClue.answer);
             }
           }
+        }
 
+        if (clueWordsAdded.includes(bankClue.answer)) {
+          console.log("Clue already used", colNum, rowNum);
+        } else {
           // STEP TWO - see if this CLUE fits on this TILE as a COL
 
           if (
