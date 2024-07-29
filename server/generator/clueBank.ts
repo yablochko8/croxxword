@@ -5,7 +5,7 @@ const fillerAuthor: Author = {
   id: 1,
 };
 
-export const clueBank: BankClue[] = [
+export const staticClueBank: BankClue[] = [
   {
     hint: "Blonde bombshell hosting the Olympics",
     author: fillerAuthor,

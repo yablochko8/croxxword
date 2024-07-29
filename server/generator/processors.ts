@@ -6,7 +6,8 @@ import {
   FECrossword,
   Results,
 } from "../../shared/types";
-import { testBECW } from "./generator";
+
+import { testCWviaAirtable } from "./generator";
 
 export const stripAnswers = (be: BECrossword): FECrossword => {
   const feClues = be.clues.map((clue) => {
@@ -30,11 +31,11 @@ export const stripAnswers = (be: BECrossword): FECrossword => {
  *  Currently treats all black tiles as "incorrect" answers.
  *
  */
-export const getResults = (cwid: number, guesses: AlphaGrid): Results => {
+export const getResults = (
+  correctAnswer: BECrossword,
+  guesses: AlphaGrid
+): Results => {
   console.log("getResults called");
-  const dummyCorrectness = cwid === 100;
-
-  const correctAnswer = testBECW;
 
   let correctWords = 0;
   let wrongWords = 0;
