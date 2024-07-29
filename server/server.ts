@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import { testFECW } from "./generator/generator";
+import { Crosswords, getFECW } from "./generator/generator";
 import { getResults } from "./generator/processors";
 
 export const PORT = 4101;
@@ -18,7 +18,8 @@ app.get("/", async (req, res) => {
 
 app.get("/api/crossword/latest", async (req, res) => {
   console.log("GET endpoint called.");
-  res.json({ crossword: testFECW });
+  const crossword = await getFECW();
+  res.json({ crossword });
 });
 
 app.post("/api/crossword/check/:id", async (req, res) => {
@@ -27,8 +28,9 @@ app.post("/api/crossword/check/:id", async (req, res) => {
     "/crossword/check/ POST endpoint called for Crossword ID:",
     crosswordId
   );
+  const correctCrossword = Crosswords[0];
   const { guesses } = req.body;
-  const results = getResults(crosswordId, guesses);
+  const results = getResults(correctCrossword, guesses);
   res.json({ results });
 });
 

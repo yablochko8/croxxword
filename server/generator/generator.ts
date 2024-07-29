@@ -1,6 +1,7 @@
 import { exampleAuthor } from "../../shared/examples";
 import { AlphaGrid, BEClue, BECrossword, BankClue } from "../../shared/types";
-import { clueBank } from "./clueBank";
+import { getClues } from "../airtable/calls";
+// import { staticClueBank } from "./clueBank";
 import { alphaGridGenerator } from "./gridGenerator";
 import { stripAnswers } from "./processors";
 
@@ -10,7 +11,9 @@ import { stripAnswers } from "./processors";
  * Only populates in rows and cols with odd numbers.
  * Could have adjacency between col-row mixes. E.g. A 4-letter column clue will not stop a row clue from appearing in the 5th row.
  */
-export const generateNewCW = (): BECrossword => {
+export const generateNewCW = async (
+  clueBank: BankClue[]
+): Promise<BECrossword> => {
   let clues: BEClue[] = [];
 
   let rowsWithClues: number[] = [];
@@ -260,9 +263,9 @@ const tryAddClueToGrid = (
   return answerGrid;
 };
 
-export const testBECW = generateNewCW();
+// export const testBECW = await generateNewCW();
 
-export const testNewGrid = buildAnswerGrid(testBECW);
+// export const testNewGrid = buildAnswerGrid(testBECW);
 
 const printGridToConsole = (grid: AlphaGrid | null) => {
   if (grid) {
@@ -272,8 +275,21 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
   }
 };
 
-console.log(testBECW);
+// console.log(testBECW);
 
-printGridToConsole(testNewGrid);
+// printGridToConsole(testNewGrid);
 
-export const testFECW = stripAnswers(testBECW);
+// export const testFECW = stripAnswers(testBECW);
+
+export const Crosswords: BECrossword[] = [];
+
+export const getFECW = async () => {
+  const clueBank = await getClues();
+  const cw = await generateNewCW(clueBank);
+  Crosswords.push(cw);
+  // const grid = buildAnswerGrid(cw);
+  return stripAnswers(cw);
+};
+
+export const testCWviaAirtable = await getFECW();
+console.log(testCWviaAirtable);
