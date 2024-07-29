@@ -141,7 +141,7 @@ export const ShowCrossword = ({
                 {clues.map((clue, index) => {
                     const isActive = activeClue ? (clue.isRow ? activeClue.row === clue.rowStart : activeClue.col === clue.colStart) : false
                     return (
-                        <div key={index} className={`${clueHint} ${isActive ? 'bg-yellow-500' : ''}`}>
+                        <div key={index} className={`${clueHint} ${isActive ? 'bg-yellow-500 text-black font-bold text-lg p-2 rounded-md shadow-md transition-all duration-300 transform hover:scale-105' : ''}`}>
                             {clue.hint} ({clue.answerLength.join(", ")})
                         </div>
                     )
