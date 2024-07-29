@@ -42,12 +42,14 @@ export const ShowCrossword = ({
     }
     const inputRefs = useRef<(HTMLInputElement | null)[][]>([]);
 
-    const [activeClue, setActiveClue] = useState<{ row: number, col: number }>({ row: 0, col: 0 });
+    const [activeClue, setActiveClue] = useState<{ row: number, col: number } | null>(null);
 
     useEffect(() => {
-        const { row, col } = activeClue;
-        if (inputRefs.current[row] && inputRefs.current[row][col]) {
-            inputRefs.current[row][col]?.focus();
+        if (activeClue) {
+            const { row, col } = activeClue;
+            if (inputRefs.current[row] && inputRefs.current[row][col]) {
+                inputRefs.current[row][col]?.focus();
+            }
         }
     }, [activeClue]);
 
@@ -99,6 +101,7 @@ export const ShowCrossword = ({
                         className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300 hover:bg-yellow-100 cursor-pointer`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={handleInputChange}
+                        onClick={() => setActiveClue({ row: rowNum, col: colNum })}
                         ref={inputRef}
                     />
                 ) : (
@@ -136,7 +139,7 @@ export const ShowCrossword = ({
         return (
             <div className="clue-list">
                 {clues.map((clue, index) => {
-                    const isActive = clue.isRow ? activeClue.row === clue.rowStart : activeClue.col === clue.colStart
+                    const isActive = activeClue ? (clue.isRow ? activeClue.row === clue.rowStart : activeClue.col === clue.colStart) : false
                     return (
                         <div key={index} className={`${clueHint} ${isActive ? 'bg-yellow-500' : ''}`}>
                             {clue.hint} ({clue.answerLength.join(", ")})
