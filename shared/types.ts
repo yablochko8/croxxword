@@ -42,25 +42,25 @@ export type Crossword = {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-export type BEClue = {
-  hint: string;
-  isRow: boolean;
-  rowStart: number;
-  colStart: number;
-  author: Author;
-  answer: string;
-  // answerLength: number[];
-};
+// export type BEClue = {
+//   hint: string;
+//   isRow: boolean;
+//   rowStart: number;
+//   colStart: number;
+//   author: Author;
+//   answer: string;
+//   // answerLength: number[];
+// };
 
-export type FEClue = {
-  hint: string;
-  isRow: boolean;
-  rowStart: number;
-  colStart: number;
-  author: Author;
-  // answer: string;
-  answerLength: number[];
-};
+// export type FEClue = {
+//   hint: string;
+//   isRow: boolean;
+//   rowStart: number;
+//   colStart: number;
+//   author: Author;
+//   // answer: string;
+//   answerLength: number[];
+// };
 
 // export type BECrossword = {
 //   id: number;
@@ -68,11 +68,11 @@ export type FEClue = {
 //   clues: BEClue[];
 // };
 
-export type FECrossword = {
-  id: number;
-  name: string;
-  clues: FEClue[];
-};
+// export type FECrossword = {
+//   id: number;
+//   name: string;
+//   clues: FEClue[];
+// };
 
 export type GridDisplay = {
   tiles: BoolGrid;
@@ -80,7 +80,7 @@ export type GridDisplay = {
   evaluation: BoolGrid;
 };
 
-export type ClueDisplay = FEClue[];
+// export type ClueDisplay = FEClue[];
 
 export type Results = {
   correctWords: number;

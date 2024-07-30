@@ -1,10 +1,4 @@
-import {
-  AlphaGrid,
-  BEClue,
-  FutureClue,
-  Clue,
-  Crossword,
-} from "../../shared/types";
+import { AlphaGrid, FutureClue, Clue, Crossword } from "../../shared/types";
 import { getClues } from "../airtable/calls";
 import { alphaGridGenerator } from "./gridGenerator";
 import { getAnswerLength, stripAnswers } from "./processors";
