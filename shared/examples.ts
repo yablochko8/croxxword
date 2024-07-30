@@ -1,9 +1,9 @@
-import { AlphaGrid, Author, BoolGrid, Crossword } from "./types";
+import { AlphaGrid, BoolGrid, Crossword } from "./types";
 
-export const exampleAuthor: Author = {
-  id: 999,
-  name: "maverick",
-};
+// export const exampleAuthor: Author = {
+//   id: 999,
+//   name: "maverick",
+// };
 
 // const exampleClue1: FEClue = {
 //   hint: "Train dear is soft on the soles",
