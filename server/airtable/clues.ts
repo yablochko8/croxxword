@@ -1,12 +1,7 @@
 import { FutureClue } from "../../shared/types";
-import { getEnv } from "../utils/getEnv";
+import { rootPath, baseId, AIRTABLE_TOKEN } from "./config";
 
-const rootPath = "https://api.airtable.com/v0";
-// on an Airtable URL: baseId starts with 'app', tableId starts with 'tbl', viewId starts with 'viw'
-const baseId = "appKt0Zoe7tx4IWk9";
 const tableIdOrName = "clues"; // tblexSgyLsH7s5378
-
-const AIRTABLE_TOKEN = getEnv("AIRTABLE_TOKEN");
 
 const addClue = async (
   clue: string,
@@ -61,6 +56,5 @@ export const getClues = async (): Promise<FutureClue[]> => {
 };
 
 // addClue("test", "this", "endpoint");
-
-const test = await getClues();
-console.log(test);
+// const test = await getClues();
+// console.log(test);

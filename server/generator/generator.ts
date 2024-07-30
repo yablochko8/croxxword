@@ -1,5 +1,5 @@
 import { AlphaGrid, FutureClue, Clue, Crossword } from "../../shared/types";
-import { getClues } from "../airtable/calls";
+import { getClues } from "../airtable/clues";
 import { alphaGridGenerator } from "./gridGenerator";
 import { getAnswerLength, stripAnswers } from "./processors";
 
@@ -274,10 +274,10 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
 export const Crosswords: Crossword[] = [];
 
 export const getFECW = async () => {
-  const cw = await generateCrossword();
-  Crosswords.push(cw);
+  const newCrossword = await generateCrossword();
+  Crosswords.push(newCrossword);
   // const grid = buildAnswerGrid(cw);
-  return stripAnswers(cw);
+  return stripAnswers(newCrossword);
 };
 
 export const testCWviaAirtable = await getFECW();

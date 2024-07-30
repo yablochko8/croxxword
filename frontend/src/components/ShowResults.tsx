@@ -20,7 +20,7 @@ export const ShowResults = ({ evaluation }: { evaluation: Results }) => {
         className={`${primaryButton} ${wrongWords >= submissionThreshold ? 'opacity-50 cursor-not-allowed' : ''}`}
         disabled={wrongWords >= submissionThreshold}
       >
-        Add Your Own Clue
+        Add Your Own Clues
       </button>
       <p className="text-sm text-red-500">
         Get at least {submissionThreshold} answers correct to submit a clue for the next crossword!
