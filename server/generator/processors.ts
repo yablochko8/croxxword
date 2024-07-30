@@ -1,11 +1,8 @@
 import {
   AlphaGrid,
-  Author,
-  BECrossword,
   BoolGrid,
+  Clue,
   Crossword,
-  FEClue,
-  FECrossword,
   Results,
 } from "../../shared/types";
 
@@ -22,23 +19,28 @@ export const getAnswerLength = (answer: string): number[] => {
 // author: Author;
 // answerLength: number[];
 
-export const stripAnswers = (be: Crossword): FECrossword => {
-  const feClues: FEClue[] = be.clues.map((clue) => {
-    const newFEClue: FEClue = {
+export const stripAnswers = (inputCrossword: Crossword): Crossword => {
+  const feClues: Clue[] = inputCrossword.clues.map((clue) => {
+    const newClue: Clue = {
+      id: clue.id,
       hint: clue.hint,
       isRow: clue.isRow,
       rowStart: clue.rowStart,
       colStart: clue.colStart,
-      author: { id: 999, name: clue.author },
+      author: clue.author,
       answerLength: clue.answerLength,
+      answer: "",
+      tiles: clue.tiles.map((tile) => ({ ...tile, letter: "" })),
+      isChecked: false,
+      isCorrect: false,
     };
-    return newFEClue;
+    return newClue;
   });
 
   return {
-    id: be.id,
-    name: "filler name",
+    id: inputCrossword.id,
     clues: feClues,
+    withAnswers: false,
   };
 };
 

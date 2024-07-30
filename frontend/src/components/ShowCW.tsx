@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { BoolGrid, FEClue, GridDisplay } from "../../../shared/types"
+import { BoolGrid, Clue, GridDisplay } from "../../../shared/types"
 
 
 
@@ -19,7 +19,7 @@ const clueHint = "text-sm text-zinc-900"
 
 type ShowCrosswordProps = {
     gridDisplay: GridDisplay,
-    clues: FEClue[],
+    clues: Clue[],
     onInput: (letter: string, rowNum: number, colNum: number) => void,
     showResults: boolean
 }
@@ -42,16 +42,16 @@ export const ShowCrossword = ({
     }
     const inputRefs = useRef<(HTMLInputElement | null)[][]>([]);
 
-    const [activeClue, setActiveClue] = useState<{ row: number, col: number } | null>(null);
+    const [activeTile, setActiveTile] = useState<{ row: number, col: number } | null>(null);
 
     useEffect(() => {
-        if (activeClue) {
-            const { row, col } = activeClue;
+        if (activeTile) {
+            const { row, col } = activeTile;
             if (inputRefs.current[row] && inputRefs.current[row][col]) {
                 inputRefs.current[row][col]?.focus();
             }
         }
-    }, [activeClue]);
+    }, [activeTile]);
 
     /**
      * Show an individual tile
@@ -71,26 +71,23 @@ export const ShowCrossword = ({
             const value = e.target.value.toUpperCase();
             onInput(value, rowNum, colNum);
 
-
             if (value) {
                 const nextCol = colNum + 1;
                 const nextRow = rowNum + 1;
 
                 if (inputRefs.current[rowNum] && inputRefs.current[rowNum][nextCol]) {
-                    setActiveClue({ row: rowNum, col: nextCol });
+                    setActiveTile({ row: rowNum, col: nextCol });
                 } else if (inputRefs.current[nextRow] && inputRefs.current[nextRow][colNum]) {
-                    setActiveClue({ row: nextRow, col: colNum });
+                    setActiveTile({ row: nextRow, col: colNum });
                 }
             }
         };
 
         const tileStyle = isInteractive ? inputCell : blankCell
-
         const isCorrect = gridDisplay.evaluation[rowNum][colNum];
         const tileColor = isInteractive
             ? `${inputCell} ${showResults ? (isCorrect ? 'bg-green-500' : gridDisplay.guesses[rowNum][colNum] ? 'bg-red-500' : '') : ''}`
             : blankCell;
-
 
         return (
             <div className={tileStyle} >
@@ -101,7 +98,7 @@ export const ShowCrossword = ({
                         className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300 hover:bg-yellow-100 cursor-pointer`}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={handleInputChange}
-                        onClick={() => setActiveClue({ row: rowNum, col: colNum })}
+                        onClick={() => setActiveTile({ row: rowNum, col: colNum })}
                         ref={inputRef}
                     />
                 ) : (
@@ -135,11 +132,12 @@ export const ShowCrossword = ({
     /**
      * Takes in list of clues and displays them prettily.
      */
-    const ClueSection = ({ clues }: { clues: FEClue[] }): JSX.Element => {
+    const ClueSection = ({ clues }: { clues: Clue[] }): JSX.Element => {
         return (
             <div className="clue-list">
                 {clues.map((clue, index) => {
-                    const isActive = activeClue ? (clue.isRow ? activeClue.row === clue.rowStart : activeClue.col === clue.colStart) : false
+                    const isActive = clue.tiles.some(tile => tile.row === activeTile?.row && tile.col === activeTile?.col)
+                    console.log("activeClues from pov of ClueSection", isActive)
                     return (
                         <div key={index} className={`${clueHint} ${isActive ? 'bg-yellow-500 text-black font-bold text-lg p-2 rounded-md shadow-md transition-all duration-300 transform hover:scale-105' : ''}`}>
                             {clue.hint} ({clue.answerLength.join(", ")})
@@ -154,7 +152,7 @@ export const ShowCrossword = ({
     /**
      * Takes in set of clues and organises them into Across & Down
      */
-    const ClueColumn = ({ clues }: { clues: FEClue[] }): JSX.Element => {
+    const ClueColumn = ({ clues }: { clues: Clue[] }): JSX.Element => {
 
         const cluesAcross = clues.filter((clue) => clue.isRow)
         const cluesDown = clues.filter((clue) => !clue.isRow)

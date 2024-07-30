@@ -2,11 +2,6 @@ export type AlphaGrid = string[][];
 
 export type BoolGrid = boolean[][];
 
-export type Author = {
-  id: number;
-  name: string;
-};
-
 export type FutureClue = {
   id?: string;
   hint: string;
@@ -72,6 +67,11 @@ export type Crossword = {
 //   id: number;
 //   name: string;
 //   clues: FEClue[];
+// };
+
+// export type Author = {
+//   id: number;
+//   name: string;
 // };
 
 export type GridDisplay = {

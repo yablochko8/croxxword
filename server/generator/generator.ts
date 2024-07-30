@@ -31,7 +31,7 @@ export const generateCrossword = async (
             rowsWithClues.includes(rowNum) ||
             rowsWithClues.includes(rowNum - 1)
           ) {
-            console.log("Row (or adjacent) already occupied:", rowNum);
+            // console.log("Row (or adjacent) already occupied:", rowNum);
           } else {
             // Create a full Clue object that will be attempted to be added to the Crossword
             const newRowClue: Clue = {
@@ -68,7 +68,7 @@ export const generateCrossword = async (
         }
 
         if (clueWordsAdded.includes(bankClue.answer)) {
-          console.log("Clue already used", colNum, rowNum);
+          // console.log("Clue already used", colNum, rowNum);
         } else {
           // STEP TWO - see if this CLUE fits on this TILE as a COL
 
@@ -76,7 +76,7 @@ export const generateCrossword = async (
             colsWithClues.includes(colNum) ||
             colsWithClues.includes(colNum - 1)
           ) {
-            console.log("Col (or adjacent) already occupied:", colNum);
+            // console.log("Col (or adjacent) already occupied:", colNum);
           } else {
             const newColClue: Clue = {
               ...bankClue,
@@ -154,7 +154,7 @@ const tryAddAnswerToGrid = (
   rowStart: number,
   colStart: number
 ) => {
-  console.log("checking if ", answer, " can fit into ", rowStart, colStart);
+  // console.log("checking if ", answer, " can fit into ", rowStart, colStart);
   const answerGrid = structuredClone(targetGrid);
 
   // Remove all spaces from the answer
