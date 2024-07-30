@@ -281,14 +281,11 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
 
 // export const testFECW = stripAnswers(testBECW);
 
-export const Crosswords: Crossword[] = [];
-
 export const generateAndRegister = async () => {
   const newCrossword = await generateCrossword();
   if (!newCrossword) {
     return null;
   }
-  Crosswords.push(newCrossword);
   const testCommand = await registerCrossword(newCrossword);
   console.log(testCommand);
   // const grid = buildAnswerGrid(cw);
