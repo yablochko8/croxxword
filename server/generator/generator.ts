@@ -1,5 +1,6 @@
 import { AlphaGrid, FutureClue, Clue, Crossword } from "../../shared/types";
-import { getClues } from "../airtable/calls";
+import { getUnusedClues } from "../airtable/clues";
+import { registerCrossword } from "../airtable/crosswords";
 import { alphaGridGenerator } from "./gridGenerator";
 import { getAnswerLength, stripAnswers } from "./processors";
 
@@ -7,50 +8,58 @@ import { getAnswerLength, stripAnswers } from "./processors";
  * This is the master query. It makes a few compromises right now:
  *
  * Only populates in rows and cols with odd numbers.
- * Could have adjacency between col-row mixes. E.g. A 4-letter column clue will not stop a row clue from appearing in the 5th row.
+ *
+ * libraryMin is the minimum number of unused clues it expects before it will
+ * generate a new crossword
  */
 export const generateCrossword = async (
-  clueBank: FutureClue[]
-): Promise<Crossword> => {
+  libraryMin: number = 10
+): Promise<Crossword | null> => {
+  const candidateClues = await getUnusedClues();
+
+  if (candidateClues.length < libraryMin) {
+    return null;
+  }
+
   let clues: Clue[] = [];
 
   let rowsWithClues: number[] = [];
   let colsWithClues: number[] = [];
-  let clueWordsAdded: string[] = [];
+  let answersAdded: string[] = [];
 
   for (let rowNum = 0; rowNum < 8; rowNum += 1) {
     for (let colNum = 0; colNum < 8; colNum += 1) {
-      for (let i = 0; i < clueBank.length; i++) {
-        const bankClue = clueBank[i];
-        if (clueWordsAdded.includes(bankClue.answer)) {
-          // console.log("Clue already used", colNum, rowNum);
+      for (let i = 0; i < candidateClues.length; i++) {
+        const candidate = candidateClues[i];
+        if (answersAdded.includes(candidate.answer)) {
+          // Skip (clue has already been used)
         } else {
           // STEP ONE - see if this CLUE fits on this TILE as a ROW
 
           if (
             rowsWithClues.includes(rowNum) ||
-            rowsWithClues.includes(rowNum - 1)
+            rowsWithClues.includes(rowNum - 1) ||
+            rowsWithClues.includes(rowNum + 1)
           ) {
-            // console.log("Row (or adjacent) already occupied:", rowNum);
+            // Skip (row or adjacent row already has a clue)
           } else {
             // Create a full Clue object that will be attempted to be added to the Crossword
             const newRowClue: Clue = {
-              ...bankClue,
-              author: "fillerauthorstring-move-to-FutureClueSchema",
-              id: "fillerid-move-to-FutureClueSchema",
+              id: "fillerid",
+              ...candidate,
               rowStart: rowNum,
               colStart: colNum,
               isRow: true,
               isChecked: false,
               isCorrect: false,
               tiles: [],
-              answerLength: getAnswerLength(bankClue.answer),
+              answerLength: getAnswerLength(candidate.answer),
             };
 
             // Populate the tiles array of the Clue object
-            for (let i = 0; i < bankClue.answer.length; i++) {
+            for (let i = 0; i < candidate.answer.length; i++) {
               newRowClue.tiles.push({
-                letter: bankClue.answer[i],
+                letter: candidate.answer[i],
                 row: rowNum,
                 col: colNum + i,
               });
@@ -62,12 +71,12 @@ export const generateCrossword = async (
               console.log("CLUE ADDED");
               clues.push(newRowClue);
               rowsWithClues.push(rowNum);
-              clueWordsAdded.push(bankClue.answer);
+              answersAdded.push(candidate.answer);
             }
           }
         }
 
-        if (clueWordsAdded.includes(bankClue.answer)) {
+        if (answersAdded.includes(candidate.answer)) {
           // console.log("Clue already used", colNum, rowNum);
         } else {
           // STEP TWO - see if this CLUE fits on this TILE as a COL
@@ -79,21 +88,20 @@ export const generateCrossword = async (
             // console.log("Col (or adjacent) already occupied:", colNum);
           } else {
             const newColClue: Clue = {
-              ...bankClue,
-              author: "fillerauthorstring-move-to-FutureClueSchema",
-              id: "fillerid-move-to-FutureClueSchema",
+              id: "fillerid",
+              ...candidate,
               rowStart: rowNum,
               colStart: colNum,
               isRow: false,
               isChecked: false,
               isCorrect: false,
               tiles: [],
-              answerLength: getAnswerLength(bankClue.answer),
+              answerLength: getAnswerLength(candidate.answer),
             };
             // Populate the tiles array of the Clue object
-            for (let i = 0; i < bankClue.answer.length; i++) {
+            for (let i = 0; i < candidate.answer.length; i++) {
               newColClue.tiles.push({
-                letter: bankClue.answer[i],
+                letter: candidate.answer[i],
                 row: rowNum + i,
                 col: colNum,
               });
@@ -104,7 +112,7 @@ export const generateCrossword = async (
               console.log("CLUE ADDED");
               clues.push(newColClue);
               colsWithClues.push(colNum);
-              clueWordsAdded.push(bankClue.answer);
+              answersAdded.push(candidate.answer);
             }
           }
         }
@@ -115,12 +123,6 @@ export const generateCrossword = async (
 
   return { id: 123, clues: clues, withAnswers: true };
 };
-
-// Raw material = BankClue
-// Processed material = BankClue + Position = BEClue
-// Output = collection of BEClues = BECrossword
-
-// Test: BECrossword => no contradictions
 
 /**
  * Cycles through every clue in a BE Crossword and confirms
@@ -279,15 +281,16 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
 
 // export const testFECW = stripAnswers(testBECW);
 
-export const Crosswords: Crossword[] = [];
-
-export const getFECW = async () => {
-  const clueBank = await getClues();
-  const cw = await generateCrossword(clueBank);
-  Crosswords.push(cw);
+export const generateAndRegister = async () => {
+  const newCrossword = await generateCrossword();
+  if (!newCrossword) {
+    return null;
+  }
+  const testCommand = await registerCrossword(newCrossword);
+  console.log(testCommand);
   // const grid = buildAnswerGrid(cw);
-  return stripAnswers(cw);
+  return stripAnswers(newCrossword);
 };
 
-export const testCWviaAirtable = await getFECW();
-console.log(testCWviaAirtable);
+export const testCWviaAirtable = await generateAndRegister();
+console.log("new crossword (if created) is:", testCWviaAirtable);
