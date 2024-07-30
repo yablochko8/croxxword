@@ -1,4 +1,4 @@
-import { Crossword, FutureClue, Tile } from "../../shared/types";
+import { Clue, Crossword, FutureClue, Tile } from "../../shared/types";
 import { getAnswerLength } from "../generator/processors";
 import { addPlacementToClue, cluesTable } from "./clues";
 import { rootPath, baseId, AIRTABLE_TOKEN } from "./config";
@@ -45,7 +45,8 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
 
   const json = await response.json();
   console.log("getCrosswordFromDB called, response from AirTable:", json);
-  const clues = json.records.map((record: any) => record.fields.clues);
+  const clues = json.records.map((record: any) => record.fields);
+  console.log("clues:", clues);
 
   for (const rawClue of clues) {
     console.log("rawClue:", rawClue);
