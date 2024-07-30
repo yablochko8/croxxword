@@ -11,6 +11,7 @@ const crosswordId = 123
 function App() {
 
   const { gridDisplay, clues, handleGuessCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
+  console.log("clues", clues)
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
 

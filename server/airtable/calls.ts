@@ -55,7 +55,7 @@ export const getClues = async (): Promise<BankClue[]> => {
   console.log("getClues called, response from AirTable:", json);
   return json.records.map((record: any) => ({
     id: record.id,
-    clue: record.fields.hint,
+    hint: record.fields.hint,
     answer: record.fields.answer,
     author: { id: 123, name: record.fields.authorName },
   }));
