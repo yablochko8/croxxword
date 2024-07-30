@@ -7,10 +7,8 @@ const serverPath = config.serverUrl;
 /**
  * Fetches a crossword from the server. Returns a FECrossword object, no answers.
  */
-export const getCrossword = async (
-  crosswordId?: number
-): Promise<Crossword> => {
-  console.log("getCrossword called");
+export const getCrossword = async (crosswordId: number): Promise<Crossword> => {
+  console.log("getCrossword called with id:", crosswordId);
   console.log("serverPath is:", serverPath);
   try {
     const response = await fetch(`${serverPath}/api/crossword/${crosswordId}`, {
