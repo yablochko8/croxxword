@@ -30,6 +30,7 @@ app.post("/api/crossword/check/:id", async (req, res) => {
   const correctCrossword = Crosswords[0];
   const { guesses } = req.body;
   const results = getResults(correctCrossword, guesses);
+  console.log("results at endpoint", results);
   res.json({ results });
 });
 
