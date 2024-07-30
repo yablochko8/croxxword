@@ -36,19 +36,17 @@ export const addPlacementToClue = async (
   rowStart: number,
   colStart: number
 ) => {
-  const update = {
-    fields: {
-      isRow: isRow.toString(),
-      rowStart: rowStart,
-      colStart: colStart,
-    },
+  const fields = {
+    isRow: isRow.toString(),
+    rowStart: rowStart,
+    colStart: colStart,
   };
 
   const response = await fetch(
     `${rootPath}/${baseId}/${cluesTable}/${clueId}`,
     {
       method: "PATCH",
-      body: JSON.stringify({ update }),
+      body: JSON.stringify({ fields }),
       headers: {
         "Content-Type": `application/json`,
         Authorization: `Bearer ${AIRTABLE_TOKEN}`,
