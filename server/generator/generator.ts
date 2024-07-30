@@ -22,21 +22,21 @@ export const generateCrossword = async (): Promise<Crossword> => {
       for (let i = 0; i < candidateClues.length; i++) {
         const candidate = candidateClues[i];
         if (answersAdded.includes(candidate.answer)) {
-          // console.log("Clue already used", colNum, rowNum);
+          // Skip (clue has already been used)
         } else {
           // STEP ONE - see if this CLUE fits on this TILE as a ROW
 
           if (
             rowsWithClues.includes(rowNum) ||
-            rowsWithClues.includes(rowNum - 1)
+            rowsWithClues.includes(rowNum - 1) ||
+            rowsWithClues.includes(rowNum + 1)
           ) {
-            // console.log("Row (or adjacent) already occupied:", rowNum);
+            // Skip (row or adjacent row already has a clue)
           } else {
             // Create a full Clue object that will be attempted to be added to the Crossword
             const newRowClue: Clue = {
+              id: "fillerid",
               ...candidate,
-              author: "fillerauthorstring-move-to-FutureClueSchema",
-              id: "fillerid-move-to-FutureClueSchema",
               rowStart: rowNum,
               colStart: colNum,
               isRow: true,
@@ -78,9 +78,8 @@ export const generateCrossword = async (): Promise<Crossword> => {
             // console.log("Col (or adjacent) already occupied:", colNum);
           } else {
             const newColClue: Clue = {
+              id: "fillerid",
               ...candidate,
-              author: "fillerauthorstring-move-to-FutureClueSchema",
-              id: "fillerid-move-to-FutureClueSchema",
               rowStart: rowNum,
               colStart: colNum,
               isRow: false,
@@ -114,12 +113,6 @@ export const generateCrossword = async (): Promise<Crossword> => {
 
   return { id: 123, clues: clues, withAnswers: true };
 };
-
-// Raw material = BankClue
-// Processed material = BankClue + Position = BEClue
-// Output = collection of BEClues = BECrossword
-
-// Test: BECrossword => no contradictions
 
 /**
  * Cycles through every clue in a BE Crossword and confirms

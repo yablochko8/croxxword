@@ -7,7 +7,7 @@ interface Config {
 
 // CHANGE THESE TWO VARIABLES
 const prodFrontend = true;
-const prodServer = true;
+const prodServer = false;
 const PORT = 4101;
 
 // I want the serverpath to be expressed as something like...
