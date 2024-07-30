@@ -7,7 +7,7 @@ interface Config {
 
 // CHANGE THESE TWO VARIABLES
 const prodFrontend = true;
-const prodServer = false;
+const prodServer = true;
 const PORT = 4101;
 
 const config: Config = {
@@ -19,5 +19,7 @@ const config: Config = {
   // serverPort: parseInt(process.env.SERVER_PORT || '4101', 10),
   // Set other properties
 };
+
+console.log(config);
 
 export default config;
