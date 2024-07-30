@@ -89,7 +89,7 @@ export const registerCrossword = async (
   });
 
   const json = await response.json();
-  const confirmedCrosswordId = json.records.fields.id;
+  const confirmedCrosswordId = Number(json.records[0].fields.id);
 
   if (confirmedCrosswordId !== newId) {
     throw new Error("Crossword not registered");

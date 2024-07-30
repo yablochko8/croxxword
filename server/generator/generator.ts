@@ -8,9 +8,18 @@ import { getAnswerLength, stripAnswers } from "./processors";
  * This is the master query. It makes a few compromises right now:
  *
  * Only populates in rows and cols with odd numbers.
+ *
+ * libraryMin is the minimum number of unused clues it expects before it will
+ * generate a new crossword
  */
-export const generateCrossword = async (): Promise<Crossword> => {
+export const generateCrossword = async (
+  libraryMin: number = 10
+): Promise<Crossword | null> => {
   const candidateClues = await getUnusedClues();
+
+  if (candidateClues.length < libraryMin) {
+    return null;
+  }
 
   let clues: Clue[] = [];
 
@@ -276,6 +285,9 @@ export const Crosswords: Crossword[] = [];
 
 export const generateAndRegister = async () => {
   const newCrossword = await generateCrossword();
+  if (!newCrossword) {
+    return null;
+  }
   Crosswords.push(newCrossword);
   const testCommand = await registerCrossword(newCrossword);
   console.log(testCommand);
@@ -284,4 +296,4 @@ export const generateAndRegister = async () => {
 };
 
 export const testCWviaAirtable = await generateAndRegister();
-console.log(testCWviaAirtable);
+console.log("new crossword (if created) is:", testCWviaAirtable);
