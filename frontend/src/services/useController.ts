@@ -13,7 +13,7 @@ export const useController = (crosswordId: number, playerId: string) => {
 
   useEffect(() => {
     const fetchCrossword = async () => {
-      const crossword = await getCrossword();
+      const crossword = await getCrossword(crosswordId);
       setCrossword(crossword);
       setGridDisplay(buildGrid(crossword));
       console.log("Fetched crossword:", crossword);

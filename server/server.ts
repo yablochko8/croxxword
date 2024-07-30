@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import config from "../shared/config";
 import { getResults, stripAnswers } from "./generator/processors";
-import { getCrossword } from "./airtable/crosswords";
+import { getCrosswordFromDB } from "./airtable/crosswords";
 
 const PORT = config.serverPort;
 const app = express();
@@ -18,7 +18,7 @@ app.get("/", async (req, res) => {
 app.get("/api/crossword/:id", async (req, res) => {
   console.log("GET endpoint called.");
   const crosswordId = req.params.id;
-  const unsafeCrossword = await getCrossword(Number(crosswordId));
+  const unsafeCrossword = await getCrosswordFromDB(Number(crosswordId));
   const crossword = stripAnswers(unsafeCrossword);
   res.json({ crossword });
 });
@@ -29,7 +29,7 @@ app.post("/api/crossword/check/:id", async (req, res) => {
     "/crossword/check/ POST endpoint called for Crossword ID:",
     crosswordId
   );
-  const correctCrossword = await getCrossword(Number(crosswordId));
+  const correctCrossword = await getCrosswordFromDB(Number(crosswordId));
   const { guesses } = req.body;
   const results = getResults(correctCrossword, guesses);
   console.log("results at endpoint", results);

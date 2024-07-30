@@ -29,7 +29,7 @@ export const getCrosswordIds = async (): Promise<number[]> => {
 /** we use croxxword id, not the airtable one
  * in airtable this lives under fields.id
  */
-export const getCrossword = async (id: number): Promise<Crossword> => {
+export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
   const filterParam = `filterByFormula=SEARCH(%22${id}%22%2C%20%7Bcrosswords%7D)`;
   const url = `${rootPath}/${baseId}/${cluesTable}?${filterParam}`;
 
@@ -58,7 +58,7 @@ export const getLatestCrosswords = async (
 ): Promise<Crossword[]> => {
   const ids = await getCrosswordIds();
   const latestIds = ids.slice(0, quantity);
-  const latestCrosswords = await Promise.all(latestIds.map(getCrossword));
+  const latestCrosswords = await Promise.all(latestIds.map(getCrosswordFromDB));
   return latestCrosswords;
 };
 
