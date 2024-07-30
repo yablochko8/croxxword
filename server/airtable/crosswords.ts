@@ -44,10 +44,11 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
   });
 
   const json = await response.json();
-  console.log("getCrossword called, response from AirTable:", json);
+  console.log("getCrosswordFromDB called, response from AirTable:", json);
   const clues = json.records.map((record: any) => record.fields.clues);
 
   for (const rawClue of clues) {
+    console.log("rawClue:", rawClue);
     rawClue.isRow = rawClue.isRow === "true";
     rawClue.isChecked = false;
     rawClue.isCorrect = false;
