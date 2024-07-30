@@ -3,6 +3,9 @@ import { primaryButton } from "../styles";
 
 export const ShowResults = ({ evaluation }: { evaluation: Results }) => {
   const { correctWords, wrongWords, correctLetters, wrongLetters } = evaluation;
+
+  const submissionThreshold = 2;
+
   return (
     <div>
       <p>
@@ -14,13 +17,13 @@ export const ShowResults = ({ evaluation }: { evaluation: Results }) => {
       </p>
       <button
         onClick={() => window.open('https://airtable.com/appKt0Zoe7tx4IWk9/pagVcorRDWGpxiUeK/form', '_blank')}
-        className={`${primaryButton} ${wrongWords > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-        disabled={wrongWords > 0}
+        className={`${primaryButton} ${wrongWords >= submissionThreshold ? 'opacity-50 cursor-not-allowed' : ''}`}
+        disabled={wrongWords >= submissionThreshold}
       >
-        Submit Clue for next crossword!
+        Add Your Own Clue
       </button>
-      <p>
-        Get all answers correct to submit a clue for the next crossword.
+      <p className="text-sm text-red-500">
+        Get at least {submissionThreshold} answers correct to submit a clue for the next crossword!
       </p>
     </div>
   );
