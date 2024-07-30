@@ -140,6 +140,9 @@ export const ShowCrossword = ({
                     return (
                         <div key={index} className={`${clueHint} ${isActive ? 'bg-yellow-500 text-black font-bold text-lg p-2 rounded-md shadow-md transition-all duration-300 transform hover:scale-105' : ''}`}>
                             {clue.hint} ({clue.answerLength.join(", ")})
+                            <span className="text-xs text-gray-500">
+                                Author: <a href={`https://twitter.com/${clue.author}`} target="_blank" rel="noopener noreferrer">@{clue.author}</a>
+                            </span>
                         </div>
                     )
                 })}

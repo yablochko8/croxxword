@@ -7,22 +7,21 @@ import { getAnswerLength, stripAnswers } from "./processors";
  * This is the master query. It makes a few compromises right now:
  *
  * Only populates in rows and cols with odd numbers.
- * Could have adjacency between col-row mixes. E.g. A 4-letter column clue will not stop a row clue from appearing in the 5th row.
  */
-export const generateCrossword = async (
-  clueBank: FutureClue[]
-): Promise<Crossword> => {
+export const generateCrossword = async (): Promise<Crossword> => {
+  const candidateClues = await getClues();
+
   let clues: Clue[] = [];
 
   let rowsWithClues: number[] = [];
   let colsWithClues: number[] = [];
-  let clueWordsAdded: string[] = [];
+  let answersAdded: string[] = [];
 
   for (let rowNum = 0; rowNum < 8; rowNum += 1) {
     for (let colNum = 0; colNum < 8; colNum += 1) {
-      for (let i = 0; i < clueBank.length; i++) {
-        const bankClue = clueBank[i];
-        if (clueWordsAdded.includes(bankClue.answer)) {
+      for (let i = 0; i < candidateClues.length; i++) {
+        const candidate = candidateClues[i];
+        if (answersAdded.includes(candidate.answer)) {
           // console.log("Clue already used", colNum, rowNum);
         } else {
           // STEP ONE - see if this CLUE fits on this TILE as a ROW
@@ -35,7 +34,7 @@ export const generateCrossword = async (
           } else {
             // Create a full Clue object that will be attempted to be added to the Crossword
             const newRowClue: Clue = {
-              ...bankClue,
+              ...candidate,
               author: "fillerauthorstring-move-to-FutureClueSchema",
               id: "fillerid-move-to-FutureClueSchema",
               rowStart: rowNum,
@@ -44,13 +43,13 @@ export const generateCrossword = async (
               isChecked: false,
               isCorrect: false,
               tiles: [],
-              answerLength: getAnswerLength(bankClue.answer),
+              answerLength: getAnswerLength(candidate.answer),
             };
 
             // Populate the tiles array of the Clue object
-            for (let i = 0; i < bankClue.answer.length; i++) {
+            for (let i = 0; i < candidate.answer.length; i++) {
               newRowClue.tiles.push({
-                letter: bankClue.answer[i],
+                letter: candidate.answer[i],
                 row: rowNum,
                 col: colNum + i,
               });
@@ -62,12 +61,12 @@ export const generateCrossword = async (
               console.log("CLUE ADDED");
               clues.push(newRowClue);
               rowsWithClues.push(rowNum);
-              clueWordsAdded.push(bankClue.answer);
+              answersAdded.push(candidate.answer);
             }
           }
         }
 
-        if (clueWordsAdded.includes(bankClue.answer)) {
+        if (answersAdded.includes(candidate.answer)) {
           // console.log("Clue already used", colNum, rowNum);
         } else {
           // STEP TWO - see if this CLUE fits on this TILE as a COL
@@ -79,7 +78,7 @@ export const generateCrossword = async (
             // console.log("Col (or adjacent) already occupied:", colNum);
           } else {
             const newColClue: Clue = {
-              ...bankClue,
+              ...candidate,
               author: "fillerauthorstring-move-to-FutureClueSchema",
               id: "fillerid-move-to-FutureClueSchema",
               rowStart: rowNum,
@@ -88,12 +87,12 @@ export const generateCrossword = async (
               isChecked: false,
               isCorrect: false,
               tiles: [],
-              answerLength: getAnswerLength(bankClue.answer),
+              answerLength: getAnswerLength(candidate.answer),
             };
             // Populate the tiles array of the Clue object
-            for (let i = 0; i < bankClue.answer.length; i++) {
+            for (let i = 0; i < candidate.answer.length; i++) {
               newColClue.tiles.push({
-                letter: bankClue.answer[i],
+                letter: candidate.answer[i],
                 row: rowNum + i,
                 col: colNum,
               });
@@ -104,7 +103,7 @@ export const generateCrossword = async (
               console.log("CLUE ADDED");
               clues.push(newColClue);
               colsWithClues.push(colNum);
-              clueWordsAdded.push(bankClue.answer);
+              answersAdded.push(candidate.answer);
             }
           }
         }
@@ -282,8 +281,7 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
 export const Crosswords: Crossword[] = [];
 
 export const getFECW = async () => {
-  const clueBank = await getClues();
-  const cw = await generateCrossword(clueBank);
+  const cw = await generateCrossword();
   Crosswords.push(cw);
   // const grid = buildAnswerGrid(cw);
   return stripAnswers(cw);
