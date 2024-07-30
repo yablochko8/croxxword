@@ -1,13 +1,13 @@
 import config from "../../../shared/config";
 import { emptyCrossword } from "../../../shared/examples";
-import { Results, GridDisplay, FECrossword } from "../../../shared/types";
+import { Results, GridDisplay, Crossword } from "../../../shared/types";
 
 const serverPath = config.serverUrl;
 
 /**
  * Fetches a crossword from the server. Returns a FECrossword object, no answers.
  */
-export const getCrossword = async (): Promise<FECrossword> => {
+export const getCrossword = async (): Promise<Crossword> => {
   console.log("getCrossword called");
   console.log("serverPath is:", serverPath);
   try {

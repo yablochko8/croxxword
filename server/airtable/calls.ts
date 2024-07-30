@@ -56,7 +56,7 @@ export const getClues = async (): Promise<FutureClue[]> => {
     id: record.id,
     hint: record.fields.hint,
     answer: record.fields.answer,
-    author: { id: 123, name: record.fields.authorName },
+    author: record.fields.authorName,
   }));
 };
 
