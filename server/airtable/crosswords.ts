@@ -45,28 +45,51 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
 
   const json = await response.json();
   console.log("getCrosswordFromDB called, response from AirTable:", json);
-  const clues = json.records.map((record: any) => record.fields);
-  console.log("clues:", clues);
+  const rawClues = json.records;
+  console.log("raw clues:", rawClues);
 
-  for (const rawClue of clues) {
+  const typedClues: Clue[] = [];
+
+  for (const rawClue of rawClues) {
     console.log("rawClue:", rawClue);
-    rawClue.isRow = rawClue.isRow === "true";
-    rawClue.isChecked = false;
-    rawClue.isCorrect = false;
-    rawClue.answerLength = getAnswerLength(rawClue.answer);
-    rawClue.tiles = [];
-    for (let i = 0; i < rawClue.answerLength.length; i++) {
-      if (rawClue.isRow) {
-        rawClue.tiles.push([rawClue.rowStart + i, rawClue.colStart]);
+
+    const typedClue: Clue = {
+      id: rawClue.id,
+      hint: rawClue.fields.hint,
+      answer: rawClue.fields.answer,
+      author: rawClue.fields.author,
+      isRow: rawClue.fields.isRow === "true",
+      rowStart: rawClue.fields.rowStart,
+      colStart: rawClue.fields.colStart,
+      isChecked: false,
+      isCorrect: false,
+      answerLength: getAnswerLength(rawClue.fields.answer),
+      tiles: [],
+    };
+    const totalLength = typedClue.answerLength.reduce(
+      (sum, length) => sum + length,
+      0
+    );
+    for (let i = 0; i < totalLength; i++) {
+      if (typedClue.isRow) {
+        typedClue.tiles.push({
+          row: typedClue.rowStart + i,
+          col: typedClue.colStart,
+          letter: "",
+        });
       } else {
-        rawClue.tiles.push([rawClue.rowStart, rawClue.colStart + i]);
+        typedClue.tiles.push({
+          row: typedClue.rowStart,
+          col: typedClue.colStart + i,
+          letter: "",
+        });
       }
     }
   }
 
   return {
     id: id,
-    clues: clues,
+    clues: typedClues,
     withAnswers: true,
   };
 };
