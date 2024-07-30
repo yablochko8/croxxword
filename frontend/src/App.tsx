@@ -1,7 +1,8 @@
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
-import { expandEvaluation } from "./services/expandEvaluation";
+import { ShowResults } from "./components/ShowResults";
 import { useController } from "./services/useController";
+import { primaryButton } from "./styles";
 
 
 const crosswordId = 100
@@ -28,12 +29,12 @@ function App() {
 
         <button
           onClick={() => handleGuessCheck()}
-          className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg m-5"
+          className={primaryButton}
         >
           Check Answers
         </button>
         <div>
-          {(results) ? expandEvaluation(results) : null}
+          {(results) ? <ShowResults evaluation={results} /> : null}
         </div>
       </div>
     </>
