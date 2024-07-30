@@ -30,6 +30,36 @@ const addClue = async (
   console.log("addClue called, response from AirTable:", json);
 };
 
+export const addPlacementToClue = async (
+  clueId: string,
+  isRow: boolean,
+  rowStart: number,
+  colStart: number
+) => {
+  const update = {
+    fields: {
+      isRow: isRow.toString(),
+      rowStart: rowStart,
+      colStart: colStart,
+    },
+  };
+
+  const response = await fetch(
+    `${rootPath}/${baseId}/${cluesTable}/${clueId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ update }),
+      headers: {
+        "Content-Type": `application/json`,
+        Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+      },
+    }
+  );
+
+  const json = await response.json();
+  console.log("addPlacementToClue called, response from AirTable:", json);
+};
+
 export const getUnusedClues = async (): Promise<FutureClue[]> => {
   // filtering for a blank string in crosswords column
   const filterParam = `filterByFormula=crosswords%3D%22%22`;

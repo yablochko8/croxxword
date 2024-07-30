@@ -1,5 +1,5 @@
-import { Crossword, FutureClue } from "../../shared/types";
-import { cluesTable } from "./clues";
+import { Crossword, FutureClue, Tile } from "../../shared/types";
+import { addPlacementToClue, cluesTable } from "./clues";
 import { rootPath, baseId, AIRTABLE_TOKEN } from "./config";
 
 const crosswordTable = "crosswords";
@@ -26,6 +26,20 @@ export const getCrosswordIds = async (): Promise<number[]> => {
   return ids;
 };
 
+export type Clue = {
+  id: string;
+  hint: string;
+  answer: string;
+  answerLength: number[];
+  author: string;
+  isRow: boolean;
+  rowStart: number;
+  colStart: number;
+  tiles: Tile[];
+  isChecked: boolean;
+  isCorrect: boolean;
+};
+
 /** we use croxxword id, not the airtable one
  * in airtable this lives under fields.id
  */
@@ -44,13 +58,12 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
 
   const json = await response.json();
   console.log("getCrossword called, response from AirTable:", json);
-  // return json.records.map((record: any) => ({
-  //   id: record.id,
-  //   hint: record.fields.hint,
-  //   answer: record.fields.answer,
-  //   author: record.fields.authorName,
-  // }));
-  return json;
+  const clues = json.records.map((record: any) => record.fields.clues);
+  return {
+    id: id,
+    clues: clues,
+    withAnswers: true,
+  };
 };
 
 export const getLatestCrosswords = async (
@@ -94,6 +107,11 @@ export const registerCrossword = async (
   if (confirmedCrosswordId !== newId) {
     throw new Error("Crossword not registered");
   }
+
+  // add placement to every clue
+  crossword.clues.forEach((clue) => {
+    addPlacementToClue(clue.id, clue.isRow, clue.rowStart, clue.colStart);
+  });
 
   const confirmedCrossword: Crossword = {
     ...crossword,

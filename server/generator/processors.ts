@@ -6,8 +6,6 @@ import {
   Results,
 } from "../../shared/types";
 
-import { testCWviaAirtable } from "./generator";
-
 export const getAnswerLength = (answer: string): number[] => {
   return answer.split(" ").map((word) => word.length);
 };

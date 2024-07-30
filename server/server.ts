@@ -20,29 +20,31 @@ app.get("/api/crossword/:id", async (req, res) => {
   const crosswordId = req.params.id;
   console.log(`Requested crossword ID: ${crosswordId}`);
 
-  try {
-    console.log(`Fetching crossword with ID ${crosswordId} from database...`);
-    const unsafeCrossword = await getCrosswordFromDB(Number(crosswordId));
-    console.log(
-      `Crossword fetched successfully: ${JSON.stringify(unsafeCrossword)}`
-    );
+  // try {
+  //   console.log(`Fetching crossword with ID ${crosswordId} from database...`);
+  //   const json = await getCrosswordFromDB(Number(crosswordId));
+  //   console.log(
+  //     `Crossword fetched successfully: ${JSON.stringify(unsafeCrossword)}`
+  //   );
 
-    console.log("Stripping answers from the crossword...");
-    const crossword = stripAnswers(unsafeCrossword);
-    console.log(`Crossword stripped of answers: ${JSON.stringify(crossword)}`);
+  //   const unsafeCrossword: Crossword = JSON.stringify(json);
 
-    console.log("Sending response to client...");
-    res.json({ crossword });
-    console.log("Response sent successfully.");
-  } catch (error) {
-    console.error(
-      `Error occurred while processing request for crossword ${crosswordId}:`,
-      error
-    );
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the crossword." });
-  }
+  //   console.log("Stripping answers from the crossword...");
+  //   const crossword = stripAnswers(unsafeCrossword);
+  //   console.log(`Crossword stripped of answers: ${JSON.stringify(crossword)}`);
+
+  //   console.log("Sending response to client...");
+  //   res.json({ crossword });
+  //   console.log("Response sent successfully.");
+  // } catch (error) {
+  //   console.error(
+  //     `Error occurred while processing request for crossword ${crosswordId}:`,
+  //     error
+  //   );
+  //   res
+  //     .status(500)
+  //     .json({ error: "An error occurred while fetching the crossword." });
+  // }
 });
 
 app.post("/api/crossword/check/:id", async (req, res) => {
