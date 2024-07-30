@@ -2,48 +2,77 @@ export type AlphaGrid = string[][];
 
 export type BoolGrid = boolean[][];
 
-export type Author = {
-  id: number;
-  name: string;
-};
-
-export type BankClue = {
+export type FutureClue = {
+  id?: string;
   hint: string;
-  author: Author;
   answer: string;
+  author: string;
 };
 
-export type BEClue = {
+export type Tile = {
+  row: number;
+  col: number;
+  letter: string;
+};
+
+export type Clue = {
+  id: string;
   hint: string;
-  isRow: boolean;
-  rowStart: number;
-  colStart: number;
-  author: Author;
   answer: string;
-  // answerLength: number[];
-};
-
-export type FEClue = {
-  hint: string;
-  isRow: boolean;
-  rowStart: number;
-  colStart: number;
-  author: Author;
-  // answer: string;
   answerLength: number[];
+  author: string;
+  isRow: boolean;
+  rowStart: number;
+  colStart: number;
+  tiles: Tile[];
+  isChecked: boolean;
+  isCorrect: boolean;
 };
 
-export type BECrossword = {
+export type Crossword = {
   id: number;
-  name: string;
-  clues: BEClue[];
+  clues: Clue[];
+  withAnswers: boolean;
 };
 
-export type FECrossword = {
-  id: number;
-  name: string;
-  clues: FEClue[];
-};
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// export type BEClue = {
+//   hint: string;
+//   isRow: boolean;
+//   rowStart: number;
+//   colStart: number;
+//   author: Author;
+//   answer: string;
+//   // answerLength: number[];
+// };
+
+// export type FEClue = {
+//   hint: string;
+//   isRow: boolean;
+//   rowStart: number;
+//   colStart: number;
+//   author: Author;
+//   // answer: string;
+//   answerLength: number[];
+// };
+
+// export type BECrossword = {
+//   id: number;
+//   name: string;
+//   clues: BEClue[];
+// };
+
+// export type FECrossword = {
+//   id: number;
+//   name: string;
+//   clues: FEClue[];
+// };
+
+// export type Author = {
+//   id: number;
+//   name: string;
+// };
 
 export type GridDisplay = {
   tiles: BoolGrid;
@@ -51,7 +80,7 @@ export type GridDisplay = {
   evaluation: BoolGrid;
 };
 
-export type ClueDisplay = FEClue[];
+// export type ClueDisplay = FEClue[];
 
 export type Results = {
   correctWords: number;

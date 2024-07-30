@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { Results, GridDisplay, FECrossword } from "../../../shared/types";
+import { Results, GridDisplay, Crossword } from "../../../shared/types";
 import { emptyFEGridDisplay } from "../../../shared/examples";
 import { checkGuesses, getCrossword } from "./serverCalls";
 import { buildGrid } from "./buildGrid";
 
-export const useController = (crosswordId: number, authorId: number) => {
-  console.log("To do: use these...", crosswordId, authorId);
+export const useController = (crosswordId: number, playerId: string) => {
+  console.log("To do: use these...", crosswordId, playerId);
   const [gridDisplay, setGridDisplay] =
     useState<GridDisplay>(emptyFEGridDisplay);
 
-  const [crossword, setCrossword] = useState<FECrossword | null>(null);
+  const [crossword, setCrossword] = useState<Crossword | null>(null);
 
   useEffect(() => {
     const fetchCrossword = async () => {
