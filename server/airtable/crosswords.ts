@@ -45,7 +45,7 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
 
   const json = await response.json();
   console.log("getCrosswordFromDB called, response from AirTable:", json);
-  const rawClues = json.records;
+  const rawClues = json.records.map((record: any) => record);
   console.log("raw clues:", rawClues);
 
   const typedClues: Clue[] = [];
@@ -85,6 +85,8 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
         });
       }
     }
+    console.log("typedClue:", typedClue);
+    typedClues.push(typedClue);
   }
 
   return {
