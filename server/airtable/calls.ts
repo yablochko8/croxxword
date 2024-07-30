@@ -12,13 +12,13 @@ const AIRTABLE_TOKEN =
 const addClue = async (
   clue: string,
   answer: string,
-  submitter: string
+  authorName: string
 ): Promise<void> => {
   const newEntry = {
     fields: {
-      Clue: clue,
-      Answer: answer,
-      Submitter: submitter,
+      clue: clue,
+      answer: answer,
+      authorName: authorName,
     },
   };
   const records = [newEntry];
@@ -57,7 +57,7 @@ export const getClues = async (): Promise<BankClue[]> => {
     id: record.id,
     clue: record.fields.hint,
     answer: record.fields.answer,
-    submitter: record.fields.authorName,
+    author: { id: 123, name: record.fields.authorName },
   }));
 };
 
