@@ -1,4 +1,5 @@
 import { Crossword, FutureClue, Tile } from "../../shared/types";
+import { getAnswerLength } from "../generator/processors";
 import { addPlacementToClue, cluesTable } from "./clues";
 import { rootPath, baseId, AIRTABLE_TOKEN } from "./config";
 
@@ -26,20 +27,6 @@ export const getCrosswordIds = async (): Promise<number[]> => {
   return ids;
 };
 
-export type Clue = {
-  id: string;
-  hint: string;
-  answer: string;
-  answerLength: number[];
-  author: string;
-  isRow: boolean;
-  rowStart: number;
-  colStart: number;
-  tiles: Tile[];
-  isChecked: boolean;
-  isCorrect: boolean;
-};
-
 /** we use croxxword id, not the airtable one
  * in airtable this lives under fields.id
  */
@@ -59,6 +46,22 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
   const json = await response.json();
   console.log("getCrossword called, response from AirTable:", json);
   const clues = json.records.map((record: any) => record.fields.clues);
+
+  for (const rawClue of clues) {
+    rawClue.isRow = rawClue.isRow === "true";
+    rawClue.isChecked = false;
+    rawClue.isCorrect = false;
+    rawClue.answerLength = getAnswerLength(rawClue.answer);
+    rawClue.tiles = [];
+    for (let i = 0; i < rawClue.answerLength.length; i++) {
+      if (rawClue.isRow) {
+        rawClue.tiles.push([rawClue.rowStart + i, rawClue.colStart]);
+      } else {
+        rawClue.tiles.push([rawClue.rowStart, rawClue.colStart + i]);
+      }
+    }
+  }
+
   return {
     id: id,
     clues: clues,
