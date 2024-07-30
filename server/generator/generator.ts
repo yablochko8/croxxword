@@ -23,7 +23,7 @@ export const generateCrossword = async (
       for (let i = 0; i < clueBank.length; i++) {
         const bankClue = clueBank[i];
         if (clueWordsAdded.includes(bankClue.answer)) {
-          console.log("Clue already used", colNum, rowNum);
+          // console.log("Clue already used", colNum, rowNum);
         } else {
           // STEP ONE - see if this CLUE fits on this TILE as a ROW
 

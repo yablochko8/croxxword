@@ -137,7 +137,6 @@ export const ShowCrossword = ({
             <div className="clue-list">
                 {clues.map((clue, index) => {
                     const isActive = clue.tiles.some(tile => tile.row === activeTile?.row && tile.col === activeTile?.col)
-                    console.log("activeClues from pov of ClueSection", isActive)
                     return (
                         <div key={index} className={`${clueHint} ${isActive ? 'bg-yellow-500 text-black font-bold text-lg p-2 rounded-md shadow-md transition-all duration-300 transform hover:scale-105' : ''}`}>
                             {clue.hint} ({clue.answerLength.join(", ")})
