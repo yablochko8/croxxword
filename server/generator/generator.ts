@@ -1,8 +1,7 @@
 import {
   AlphaGrid,
   BEClue,
-  BECrossword,
-  BankClue,
+  FutureClue,
   Clue,
   Crossword,
 } from "../../shared/types";
@@ -17,7 +16,7 @@ import { getAnswerLength, stripAnswers } from "./processors";
  * Could have adjacency between col-row mixes. E.g. A 4-letter column clue will not stop a row clue from appearing in the 5th row.
  */
 export const generateCrossword = async (
-  clueBank: BankClue[]
+  clueBank: FutureClue[]
 ): Promise<Crossword> => {
   let clues: Clue[] = [];
 

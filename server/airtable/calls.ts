@@ -1,4 +1,4 @@
-import { BankClue } from "../../shared/types";
+import { FutureClue } from "../../shared/types";
 import { getEnv } from "../utils/getEnv";
 
 const rootPath = "https://api.airtable.com/v0";
@@ -35,7 +35,7 @@ const addClue = async (
   console.log("addClue called, response from AirTable:", json);
 };
 
-export const getClues = async (): Promise<BankClue[]> => {
+export const getClues = async (): Promise<FutureClue[]> => {
   const sortParam =
     "sort%5B0%5D%5Bfield%5D=quality&sort%5B0%5D%5Bdirection%5D=desc";
 

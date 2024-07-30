@@ -7,7 +7,6 @@ export type Author = {
   name: string;
 };
 
-// FUTURE TYPES - NOT YET IN USE
 export type FutureClue = {
   id?: string;
   hint: string;
@@ -43,12 +42,6 @@ export type Crossword = {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-export type BankClue = {
-  hint: string;
-  author: Author;
-  answer: string;
-};
-
 export type BEClue = {
   hint: string;
   isRow: boolean;
@@ -69,11 +62,11 @@ export type FEClue = {
   answerLength: number[];
 };
 
-export type BECrossword = {
-  id: number;
-  name: string;
-  clues: BEClue[];
-};
+// export type BECrossword = {
+//   id: number;
+//   name: string;
+//   clues: BEClue[];
+// };
 
 export type FECrossword = {
   id: number;
