@@ -1,5 +1,5 @@
 import { AlphaGrid, FutureClue, Clue, Crossword } from "../../shared/types";
-import { getClues } from "../airtable/clues";
+import { getUnusedClues } from "../airtable/clues";
 import { registerCrossword } from "../airtable/crosswords";
 import { alphaGridGenerator } from "./gridGenerator";
 import { getAnswerLength, stripAnswers } from "./processors";
@@ -10,7 +10,7 @@ import { getAnswerLength, stripAnswers } from "./processors";
  * Only populates in rows and cols with odd numbers.
  */
 export const generateCrossword = async (): Promise<Crossword> => {
-  const candidateClues = await getClues();
+  const candidateClues = await getUnusedClues();
 
   let clues: Clue[] = [];
 
@@ -274,7 +274,7 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
 
 export const Crosswords: Crossword[] = [];
 
-export const getFECW = async () => {
+export const generateAndRegister = async () => {
   const newCrossword = await generateCrossword();
   Crosswords.push(newCrossword);
   const testCommand = await registerCrossword(newCrossword);
@@ -283,5 +283,5 @@ export const getFECW = async () => {
   return stripAnswers(newCrossword);
 };
 
-export const testCWviaAirtable = await getFECW();
+export const testCWviaAirtable = await generateAndRegister();
 console.log(testCWviaAirtable);
