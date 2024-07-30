@@ -3,24 +3,41 @@ import {
   Author,
   BECrossword,
   BoolGrid,
+  Crossword,
+  FEClue,
   FECrossword,
   Results,
 } from "../../shared/types";
 
 import { testCWviaAirtable } from "./generator";
 
-export const stripAnswers = (be: BECrossword): FECrossword => {
-  const feClues = be.clues.map((clue) => {
-    const { answer, ...feClue } = clue;
-    return {
-      ...feClue,
-      answerLength: answer.split(" ").map((word) => word.length),
+export const getAnswerLength = (answer: string): number[] => {
+  return answer.split(" ").map((word) => word.length);
+};
+
+// hint: string;
+// isRow: boolean;
+// rowStart: number;
+// colStart: number;
+// author: Author;
+// answerLength: number[];
+
+export const stripAnswers = (be: Crossword): FECrossword => {
+  const feClues: FEClue[] = be.clues.map((clue) => {
+    const newFEClue: FEClue = {
+      hint: clue.hint,
+      isRow: clue.isRow,
+      rowStart: clue.rowStart,
+      colStart: clue.colStart,
+      author: { id: 999, name: clue.author },
+      answerLength: clue.answerLength,
     };
+    return newFEClue;
   });
 
   return {
     id: be.id,
-    name: be.name,
+    name: "filler name",
     clues: feClues,
   };
 };
@@ -32,7 +49,7 @@ export const stripAnswers = (be: BECrossword): FECrossword => {
  *
  */
 export const getResults = (
-  correctAnswer: BECrossword,
+  correctAnswer: Crossword,
   guesses: AlphaGrid
 ): Results => {
   console.log("getResults called");

@@ -1,11 +1,10 @@
 import express from "express";
 import cors from "cors";
-
+import config from "../shared/config";
 import { Crosswords, getFECW } from "./generator/generator";
 import { getResults } from "./generator/processors";
 
-export const PORT = 4101;
-
+const PORT = config.serverPort;
 const app = express();
 
 app.use(express.json());
@@ -23,7 +22,7 @@ app.get("/api/crossword/latest", async (req, res) => {
 });
 
 app.post("/api/crossword/check/:id", async (req, res) => {
-  const crosswordId = Number(req.params.id);
+  const crosswordId = req.params.id;
   console.log(
     "/crossword/check/ POST endpoint called for Crossword ID:",
     crosswordId

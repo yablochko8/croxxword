@@ -4,8 +4,8 @@ import { emptyFEGridDisplay } from "../../../shared/examples";
 import { checkGuesses, getCrossword } from "./serverCalls";
 import { buildGrid } from "./buildGrid";
 
-export const useController = (crosswordId: number, authorId: number) => {
-  console.log("To do: use these...", crosswordId, authorId);
+export const useController = (crosswordId: number, playerId: string) => {
+  console.log("To do: use these...", crosswordId, playerId);
   const [gridDisplay, setGridDisplay] =
     useState<GridDisplay>(emptyFEGridDisplay);
 

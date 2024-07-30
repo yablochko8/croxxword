@@ -5,9 +5,8 @@ const rootPath = "https://api.airtable.com/v0";
 // on an Airtable URL: baseId starts with 'app', tableId starts with 'tbl', viewId starts with 'viw'
 const baseId = "appKt0Zoe7tx4IWk9";
 const tableIdOrName = "clues"; // tblexSgyLsH7s5378
-const AIRTABLE_TOKEN =
-  "pat7r5nabpOM9zI9O.1b147aac2375f08eabeb31395ed00836b2e3601ef90d2f666a325ac5341d1f2a";
-// const AIRTABLE_TOKEN = getEnv("AIRTABLE_TOKEN");
+
+const AIRTABLE_TOKEN = getEnv("AIRTABLE_TOKEN");
 
 const addClue = async (
   clue: string,

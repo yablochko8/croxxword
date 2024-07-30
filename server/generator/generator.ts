@@ -1,9 +1,14 @@
-import { exampleAuthor } from "../../shared/examples";
-import { AlphaGrid, BEClue, BECrossword, BankClue } from "../../shared/types";
+import {
+  AlphaGrid,
+  BEClue,
+  BECrossword,
+  BankClue,
+  Clue,
+  Crossword,
+} from "../../shared/types";
 import { getClues } from "../airtable/calls";
-// import { staticClueBank } from "./clueBank";
 import { alphaGridGenerator } from "./gridGenerator";
-import { stripAnswers } from "./processors";
+import { getAnswerLength, stripAnswers } from "./processors";
 
 /**
  * This is the master query. It makes a few compromises right now:
@@ -11,10 +16,10 @@ import { stripAnswers } from "./processors";
  * Only populates in rows and cols with odd numbers.
  * Could have adjacency between col-row mixes. E.g. A 4-letter column clue will not stop a row clue from appearing in the 5th row.
  */
-export const generateNewCW = async (
+export const generateCrossword = async (
   clueBank: BankClue[]
-): Promise<BECrossword> => {
-  let clues: BEClue[] = [];
+): Promise<Crossword> => {
+  let clues: Clue[] = [];
 
   let rowsWithClues: number[] = [];
   let colsWithClues: number[] = [];
@@ -35,16 +40,32 @@ export const generateNewCW = async (
           ) {
             console.log("Row (or adjacent) already occupied:", rowNum);
           } else {
-            const newRowClue: BEClue = {
+            // Create a full Clue object that will be attempted to be added to the Crossword
+            const newRowClue: Clue = {
               ...bankClue,
+              author: "fillerauthorstring-move-to-FutureClueSchema",
+              id: "fillerid-move-to-FutureClueSchema",
               rowStart: rowNum,
               colStart: colNum,
               isRow: true,
+              isChecked: false,
+              isCorrect: false,
+              tiles: [],
+              answerLength: getAnswerLength(bankClue.answer),
             };
+
+            // Populate the tiles array of the Clue object
+            for (let i = 0; i < bankClue.answer.length; i++) {
+              newRowClue.tiles.push({
+                letter: bankClue.answer[i],
+                row: rowNum,
+                col: colNum + i,
+              });
+            }
             const tempClues = [...clues];
             tempClues.push(newRowClue);
 
-            if (validateBECW(tempClues)) {
+            if (validateCrossword(tempClues)) {
               console.log("CLUE ADDED");
               clues.push(newRowClue);
               rowsWithClues.push(rowNum);
@@ -64,15 +85,29 @@ export const generateNewCW = async (
           ) {
             console.log("Col (or adjacent) already occupied:", colNum);
           } else {
-            const newColClue: BEClue = {
+            const newColClue: Clue = {
               ...bankClue,
+              author: "fillerauthorstring-move-to-FutureClueSchema",
+              id: "fillerid-move-to-FutureClueSchema",
               rowStart: rowNum,
               colStart: colNum,
               isRow: false,
+              isChecked: false,
+              isCorrect: false,
+              tiles: [],
+              answerLength: getAnswerLength(bankClue.answer),
             };
+            // Populate the tiles array of the Clue object
+            for (let i = 0; i < bankClue.answer.length; i++) {
+              newColClue.tiles.push({
+                letter: bankClue.answer[i],
+                row: rowNum + i,
+                col: colNum,
+              });
+            }
             const tempClues2 = [...clues];
             tempClues2.push(newColClue);
-            if (validateBECW(tempClues2)) {
+            if (validateCrossword(tempClues2)) {
               console.log("CLUE ADDED");
               clues.push(newColClue);
               colsWithClues.push(colNum);
@@ -85,7 +120,7 @@ export const generateNewCW = async (
   }
   // }
 
-  return { id: 123, name: "new cw yo", clues: clues };
+  return { id: 123, clues: clues, withAnswers: true };
 };
 
 // Raw material = BankClue
@@ -98,13 +133,13 @@ export const generateNewCW = async (
  * Cycles through every clue in a BE Crossword and confirms
  * there are no tile clashes.
  */
-const validateBECW = (clues: BEClue[]): boolean => {
+const validateCrossword = (clues: Clue[]): boolean => {
   let answerGrid = alphaGridGenerator(8);
 
   for (const clue of clues) {
-    const result = tryAddClueToGrid(
+    const result = tryAddAnswerToGrid(
       answerGrid,
-      clue,
+      clue.answer!,
       clue.isRow,
       clue.rowStart,
       clue.colStart
@@ -118,49 +153,19 @@ const validateBECW = (clues: BEClue[]): boolean => {
   return true;
 };
 
-/**
- * Returns an answer grid if possible
- */
-const buildAnswerGrid = (source: BECrossword): null | AlphaGrid => {
-  let answerGrid = alphaGridGenerator(8);
-
-  // go through every item in source.clues and add it to the answer grid
-  for (const clue of source.clues) {
-    const result = tryAddClueToGrid(
-      answerGrid,
-      clue,
-      clue.isRow,
-      clue.rowStart,
-      clue.colStart
-    );
-    if (result === null) {
-      return null;
-    }
-    answerGrid = result;
-  }
-
-  return answerGrid;
-};
-
 /** Checks if a clue can be added to a specific grid position. */
-const tryAddClueToGrid = (
+const tryAddAnswerToGrid = (
   targetGrid: AlphaGrid,
-  bankClue: BankClue,
+  answer: string,
   isRow: boolean,
   rowStart: number,
   colStart: number
 ) => {
-  console.log(
-    "checking if ",
-    bankClue.answer,
-    " can fit into ",
-    rowStart,
-    colStart
-  );
+  console.log("checking if ", answer, " can fit into ", rowStart, colStart);
   const answerGrid = structuredClone(targetGrid);
 
   // Remove all spaces from the answer
-  const squashedClue = bankClue.answer.replace(/\s+/g, "");
+  const squashedClue = answer.replace(/\s+/g, "");
 
   // Check if the answer is too long for the grid
   if (isRow) {
@@ -201,7 +206,7 @@ const tryAddClueToGrid = (
       // Check if word overlaps with another word with a non-matching letter
       if (
         answerGrid[rowStart][colStart + i] &&
-        answerGrid[rowStart][colStart + i] !== bankClue.answer[i]
+        answerGrid[rowStart][colStart + i] !== answer[i]
       ) {
         return null;
       }
@@ -229,12 +234,12 @@ const tryAddClueToGrid = (
       // Based on current population method, no need to check the cell below
 
       // If the above trigger conditions are not met then we can add it to the grid
-      answerGrid[rowStart][colStart + i] = bankClue.answer[i];
+      answerGrid[rowStart][colStart + i] = answer[i];
     } else {
       // COL CLUES - same logic as above transposed
       if (
         answerGrid[rowStart + i][colStart] &&
-        answerGrid[rowStart + i][colStart] !== bankClue.answer[i]
+        answerGrid[rowStart + i][colStart] !== answer[i]
       ) {
         return null;
       }
@@ -257,7 +262,7 @@ const tryAddClueToGrid = (
         return null;
       }
 
-      answerGrid[rowStart + i][colStart] = bankClue.answer[i];
+      answerGrid[rowStart + i][colStart] = answer[i];
     }
   }
   return answerGrid;
@@ -281,11 +286,11 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
 
 // export const testFECW = stripAnswers(testBECW);
 
-export const Crosswords: BECrossword[] = [];
+export const Crosswords: Crossword[] = [];
 
 export const getFECW = async () => {
   const clueBank = await getClues();
-  const cw = await generateNewCW(clueBank);
+  const cw = await generateCrossword(clueBank);
   Crosswords.push(cw);
   // const grid = buildAnswerGrid(cw);
   return stripAnswers(cw);

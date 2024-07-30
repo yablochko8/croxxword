@@ -1,16 +1,15 @@
 import "./App.css";
 import { ShowCrossword } from "./components/ShowCW";
 import { expandEvaluation } from "./services/expandEvaluation";
-import { exampleAuthor } from "../../shared/examples";
 import { useController } from "./services/useController";
 
-const currentUser = exampleAuthor
 
-const crosswordId = 123
+const crosswordId = 100
+const playerId = "playerId"
 
 function App() {
 
-  const { gridDisplay, clues, handleGuessCheck, changeLetter, results } = useController(crosswordId, currentUser.id);
+  const { gridDisplay, clues, handleGuessCheck, changeLetter, results } = useController(crosswordId, playerId);
   console.log("clues", clues)
 
   // add useEffect, when guessEvaluation changes, apply evalation.evaluationGrid -> gridDisplay.evaluation
@@ -20,12 +19,11 @@ function App() {
     <>
       <div className="min-h-screen">
 
-        <div>Welcome {currentUser.name}</div>
+        <div>Welcome {playerId}</div>
 
         <div>Crossword # {crosswordId}</div>
 
         <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} showResults={!!results} />
-
 
 
         <button

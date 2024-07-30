@@ -7,6 +7,42 @@ export type Author = {
   name: string;
 };
 
+// FUTURE TYPES - NOT YET IN USE
+export type FutureClue = {
+  id?: string;
+  hint: string;
+  answer: string;
+  author: string;
+};
+
+export type Tile = {
+  row: number;
+  col: number;
+  letter: string;
+};
+
+export type Clue = {
+  id: string;
+  hint: string;
+  answer: string;
+  answerLength: number[];
+  author: string;
+  isRow: boolean;
+  rowStart: number;
+  colStart: number;
+  tiles: Tile[];
+  isChecked: boolean;
+  isCorrect: boolean;
+};
+
+export type Crossword = {
+  id: number;
+  clues: Clue[];
+  withAnswers: boolean;
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 export type BankClue = {
   hint: string;
   author: Author;
