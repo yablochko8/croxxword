@@ -10,10 +10,13 @@ const prodFrontend = true;
 const prodServer = true;
 const PORT = 4101;
 
+// I want the serverpath to be expressed as something like...
+// process.env.SERVER_URL but for some reason it keeps failing on build
+
 const config: Config = {
   prodMode: prodServer && prodFrontend,
   serverUrl: prodServer
-    ? process.env.SERVER_URL || `http://localhost:${PORT}`
+    ? "https://lui-croxxword.onrender.com"
     : `http://localhost:${PORT}`,
   serverPort: PORT,
   // serverPort: parseInt(process.env.SERVER_PORT || '4101', 10),
