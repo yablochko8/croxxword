@@ -1,11 +1,8 @@
-import {
-  AlphaGrid,
-  BoolGrid,
-  FECrossword,
-  GridDisplay,
-} from "../../../shared/types";
+import { AlphaGrid, BoolGrid, GridDisplay } from "../../../shared/types";
 
-export const buildGrid = (cw: FECrossword): GridDisplay => {
+import { Crossword } from "../../../shared/types";
+
+export const buildGrid = (cw: Crossword): GridDisplay => {
   const size = 8; // Assuming a fixed size for the grid
 
   const tiles: BoolGrid = Array(size)
@@ -18,7 +15,6 @@ export const buildGrid = (cw: FECrossword): GridDisplay => {
     .fill(null)
     .map(() => Array(size).fill(false));
 
-  // BUG - SOMETHING HERE BREAKS WITH MULTI WORD CLUES (e.g. New York)
   cw.clues.forEach((clue) => {
     const { isRow, rowStart, colStart, answerLength } = clue;
     let [row, col] = [rowStart, colStart];
