@@ -10,7 +10,10 @@ export const getAnswerLength = (answer: string): number[] => {
   return answer.split(" ").map((word) => word.length);
 };
 
-export const stripAnswers = (inputCrossword: Crossword): Crossword => {
+/**
+ * May be no longer needed. Currently the same job is handled in server.ts by zod parsing.
+ */
+const stripAnswers = (inputCrossword: Crossword): Crossword => {
   const feClues: Clue[] = inputCrossword.clues.map((clue) => {
     const newClue: Clue = {
       id: clue.id,
@@ -36,18 +39,13 @@ export const stripAnswers = (inputCrossword: Crossword): Crossword => {
 };
 
 /**
- *  This works (checks the results) but is AI-written and needs review.
- *
- *  Currently treats all black tiles as "incorrect" answers.
- *
+ * Server-side function to take in the full Crossword object (that includes answers)
+ * and an AlphaGrid of user guesses.
  */
 export const getResults = (
   correctAnswer: Crossword,
   guesses: AlphaGrid
 ): Results => {
-  console.log("getResults called with guesses:", guesses);
-  console.log("correctAnswer.clues:", correctAnswer.clues);
-  console.log("END OF GUESSES");
   let correctWords = 0;
   let wrongWords = 0;
   let correctLetters = 0;
@@ -99,32 +97,9 @@ export const getResults = (
         }
       });
 
-      // if (correctLetter) {
-      //   correctLetters++;
-      // } else {
-      //   wrongLetters++;
-      // }
-
       return correctLetter;
     })
   );
-
-  // correctAnswer.clues.forEach((clue) => {
-  //   const guessWord = clue.isRow
-  //     ? guesses[clue.rowStart]
-  //         .slice(clue.colStart, clue.colStart + clue.answer.length)
-  //         .join("")
-  //     : guesses
-  //         .slice(clue.rowStart, clue.rowStart + clue.answer.length)
-  //         .map((row) => row[clue.colStart])
-  //         .join("");
-
-  //   if (guessWord === clue.answer) {
-  //     correctWords++;
-  //   } else {
-  //     wrongWords++;
-  //   }
-  // });
 
   const realResult: Results = {
     correctWords,

@@ -29,58 +29,21 @@ export type Clue = {
   isCorrect: boolean;
 };
 
+/*
+ * Global Crossword object
+ * There is a constrained version of this in server.ts defined by zod parsing.
+ */
 export type Crossword = {
   id: number;
   clues: Clue[];
   withAnswers: boolean;
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-// export type BEClue = {
-//   hint: string;
-//   isRow: boolean;
-//   rowStart: number;
-//   colStart: number;
-//   author: Author;
-//   answer: string;
-//   // answerLength: number[];
-// };
-
-// export type FEClue = {
-//   hint: string;
-//   isRow: boolean;
-//   rowStart: number;
-//   colStart: number;
-//   author: Author;
-//   // answer: string;
-//   answerLength: number[];
-// };
-
-// export type BECrossword = {
-//   id: number;
-//   name: string;
-//   clues: BEClue[];
-// };
-
-// export type FECrossword = {
-//   id: number;
-//   name: string;
-//   clues: FEClue[];
-// };
-
-// export type Author = {
-//   id: number;
-//   name: string;
-// };
-
 export type GridDisplay = {
   tiles: BoolGrid;
   guesses: AlphaGrid;
   evaluation: BoolGrid;
 };
-
-// export type ClueDisplay = FEClue[];
 
 export type Results = {
   correctWords: number;
