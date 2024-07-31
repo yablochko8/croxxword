@@ -5,7 +5,7 @@ import { BoolGrid, Clue, GridDisplay } from "../../../shared/types"
 
 // ALL STYLES HERE...FOR NOW
 
-const bgColor = "bg-zinc-900"
+const bgColor = "bg-transparent"
 const flexRow = `flex flex-row justify-center ${bgColor}`
 const flexCol = `flex flex-col justify-center ${bgColor}`
 const cellStylesCommon = "flex flex-col rounded-sm w-10 h-10"
@@ -90,22 +90,23 @@ export const ShowCrossword = ({
             : blankCell;
 
         return (
-            <div className={`${tileStyle} overflow-hidden focus:bg-yellow-300 hover:bg-yellow-500`} style={{ width: '40px', height: '40px' }}>
-                {isInteractive ? (
-                    <input
-                        type="text"
-                        maxLength={1}
-                        className={`w-full h-full text-center transform -rotate-45 ${tileColor}  cursor-pointer border-none outline-none`}
-                        style={{ borderRadius: '0' }}
-                        defaultValue={gridDisplay.guesses[rowNum][colNum]}
-                        onChange={handleInputChange}
-                        onClick={() => setActiveTile({ row: rowNum, col: colNum })}
-                        ref={inputRef}
-                    />
-                ) : (
-                    <div className="w-full h-full transform -rotate-45" />
-                )}
-            </div>
+            <>
+                <div className={`${tileStyle} overflow-hidden focus:bg-yellow-300 hover:bg-yellow-500 w-10 h-10 ${isInteractive ? 'shadow-[0_0_20px_10px_rgba(173,16,30,10.5)] ' : ''}`}>
+                    {isInteractive ? (
+                        <input
+                            type="text"
+                            maxLength={1}
+                            className={`w-full h-full text-center transform -rotate-45 ${tileColor} cursor-pointer border-none outline-none`}
+                            defaultValue={gridDisplay.guesses[rowNum][colNum]}
+                            onChange={handleInputChange}
+                            onClick={() => setActiveTile({ row: rowNum, col: colNum })}
+                            ref={inputRef}
+                        />
+                    ) : (
+                        <div className="w-full h-full transform -rotate-45 border-none" style={{ zIndex: 1 }} />
+                    )}
+                </div>
+            </>
         );
     };
 
@@ -121,7 +122,7 @@ export const ShowCrossword = ({
                 }}>
                     {boolGrid.map((row, rowNum) =>
                         row.map((cell, colNum) => (
-                            <div key={`${rowNum}-${colNum}`} className="border border-black w-full h-full flex justify-center items-center">
+                            <div key={`${rowNum}-${colNum}`} className="border border-none w-full h-full flex justify-center items-center">
                                 <Tile isInteractive={cell} rowNum={rowNum} colNum={colNum} />
                             </div>
                         ))
