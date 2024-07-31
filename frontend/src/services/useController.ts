@@ -41,12 +41,17 @@ export const useController = (crosswordId: number, playerId: string) => {
    */
   const handleGuessCheck = async () => {
     console.log("Checking the server now (for real)");
-    const newResults = await checkGuesses(crosswordId, gridDisplay);
-    setResults(newResults);
-    setGridDisplay((prevGridDisplay) => ({
-      ...prevGridDisplay,
-      evaluation: newResults.evaluationGrid,
-    }));
+    try {
+      const newResults = await checkGuesses(crosswordId, gridDisplay);
+      setResults(newResults);
+      setGridDisplay((prevGridDisplay) => ({
+        ...prevGridDisplay,
+        evaluation: newResults.evaluationGrid,
+      }));
+    } catch (error) {
+      console.error("Error checking guesses:", error);
+      // Optionally, set an error state or show a user-friendly message
+    }
   };
 
   const clues = crossword ? crossword.clues : [];
