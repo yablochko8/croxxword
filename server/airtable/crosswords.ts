@@ -57,7 +57,7 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
       id: rawClue.id,
       hint: rawClue.fields.hint,
       answer: rawClue.fields.answer,
-      author: rawClue.fields.author,
+      author: rawClue.fields.authorName, // TODO... fix this discrepancy
       isRow: rawClue.fields.isRow === "true",
       rowStart: rawClue.fields.rowStart,
       colStart: rawClue.fields.colStart,
