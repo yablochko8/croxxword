@@ -63,6 +63,7 @@ export const getResults = (
       const guess = guesses[tile.row][tile.col];
       if (guess === "") {
         // Empty guess is considered incorrect
+        wrongLetters++;
         fullWordCorrect = false;
       } else if (tile.letter.toUpperCase() === guess.toUpperCase()) {
         correctLetters++;
