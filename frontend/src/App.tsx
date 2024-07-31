@@ -5,7 +5,7 @@ import { useController } from "./services/useController";
 import { primaryButton } from "./styles";
 
 
-const crosswordId = 108
+const crosswordId = 110
 const playerId = "playerId"
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
       <div className="min-h-screen">
 
         <div>Crossword # {crosswordId}</div>
+        <div className="text-sm text-green-600 m-2">All clues by real humans. If you solve it, you can add your clues to future crosswords.</div>
 
         <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} showResults={!!results} />
 
