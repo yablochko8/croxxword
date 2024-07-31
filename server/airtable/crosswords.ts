@@ -73,14 +73,14 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
     for (let i = 0; i < totalLength; i++) {
       if (typedClue.isRow) {
         typedClue.tiles.push({
-          row: typedClue.rowStart + i,
-          col: typedClue.colStart,
+          row: typedClue.rowStart,
+          col: typedClue.colStart + i,
           letter: "",
         });
       } else {
         typedClue.tiles.push({
-          row: typedClue.rowStart,
-          col: typedClue.colStart + i,
+          row: typedClue.rowStart + i,
+          col: typedClue.colStart,
           letter: "",
         });
       }
