@@ -93,15 +93,17 @@ export const ShowCrossword = ({
             <>
                 <div className={`${tileStyle} overflow-hidden focus:bg-yellow-300 hover:bg-yellow-500 w-10 h-10 ${isInteractive ? 'shadow-[0_0_20px_10px_rgba(173,16,30,10.5)] ' : ''}`}>
                     {isInteractive ? (
-                        <input
-                            type="text"
-                            maxLength={1}
-                            className={`w-full h-full text-center transform -rotate-45 ${tileColor} cursor-pointer border-none outline-none`}
-                            defaultValue={gridDisplay.guesses[rowNum][colNum]}
-                            onChange={handleInputChange}
-                            onClick={() => setActiveTile({ row: rowNum, col: colNum })}
-                            ref={inputRef}
-                        />
+                        <div className="w-full h-full transform bg-white" style={{ zIndex: 10 }}>
+                            <input
+                                type="text"
+                                maxLength={1}
+                                className={`w-full h-full text-center transform -rotate-45 ${tileColor} cursor-pointer border-none outline-none`}
+                                defaultValue={gridDisplay.guesses[rowNum][colNum]}
+                                onChange={handleInputChange}
+                                onClick={() => setActiveTile({ row: rowNum, col: colNum })}
+                                ref={inputRef}
+                            />
+                        </div>
                     ) : (
                         <div className="w-full h-full transform -rotate-45 border-none" style={{ zIndex: 1 }} />
                     )}
