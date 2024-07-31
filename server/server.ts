@@ -1,14 +1,43 @@
 import express from "express";
 import cors from "cors";
 import config from "../shared/config";
-import { getResults, stripAnswers } from "./generator/processors";
+import { getResults } from "./generator/processors";
 import { getCrosswordFromDB } from "./airtable/crosswords";
+import { z } from "zod";
+import { Crossword } from "../shared/types";
 
 const PORT = config.serverPort;
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+// Zod schema that describes crosswords as they will be send to the Frontend
+const StrippedTileSchema = z.object({
+  row: z.number(),
+  col: z.number(),
+  letter: z.string().transform(() => ""),
+});
+
+const StrippedClueSchema = z.object({
+  id: z.string(),
+  hint: z.string(),
+  answer: z.string().transform(() => ""),
+  answerLength: z.array(z.number()),
+  author: z.string(),
+  isRow: z.boolean(),
+  rowStart: z.number(),
+  colStart: z.number(),
+  tiles: z.array(StrippedTileSchema),
+  isChecked: z.boolean(),
+  isCorrect: z.boolean(),
+});
+
+const StrippedCrosswordSchema = z.object({
+  id: z.number(),
+  clues: z.array(StrippedClueSchema),
+  withAnswers: z.boolean().transform(() => false),
+});
 
 app.get("/", async (req, res) => {
   console.log("GET endpoint called.");
@@ -21,18 +50,9 @@ app.get("/api/crossword/:id", async (req, res) => {
   console.log(`Requested crossword ID: ${crosswordId}`);
 
   try {
-    console.log(`Fetching crossword with ID ${crosswordId} from database...`);
     const unsafeCrossword = await getCrosswordFromDB(Number(crosswordId));
-    console.log(
-      `Crossword fetched successfully, "unsafe" with answers: ${unsafeCrossword}`
-    );
-    console.log("Stripping answers from the crossword...");
-    const crossword = stripAnswers(unsafeCrossword);
-    console.log(`Crossword stripped of answers: ${JSON.stringify(crossword)}`);
-
-    console.log("Sending response to client...");
+    const crossword: Crossword = StrippedCrosswordSchema.parse(unsafeCrossword);
     res.json({ crossword });
-    console.log("Response sent successfully.");
   } catch (error) {
     console.error(
       `Error occurred while processing request for crossword ${crosswordId}:`,

@@ -2,7 +2,7 @@ import { AlphaGrid, FutureClue, Clue, Crossword } from "../../shared/types";
 import { getUnusedClues } from "../airtable/clues";
 import { registerCrossword } from "../airtable/crosswords";
 import { alphaGridGenerator } from "./gridGenerator";
-import { getAnswerLength, stripAnswers } from "./processors";
+import { getAnswerLength } from "./processors";
 
 /**
  * This is the master query. It makes a few compromises right now:
@@ -275,22 +275,15 @@ const printGridToConsole = (grid: AlphaGrid | null) => {
   }
 };
 
-// console.log(testBECW);
-
-// printGridToConsole(testNewGrid);
-
-// export const testFECW = stripAnswers(testBECW);
-
+/**
+ * Server function to generate a new crossword and register it in the database.
+ * If successful, returns the ID of the new crossword.
+ */
 export const generateAndRegister = async () => {
-  const newCrossword = await generateCrossword();
-  if (!newCrossword) {
+  const proposedCrossword = await generateCrossword();
+  if (!proposedCrossword) {
     return null;
   }
-  const testCommand = await registerCrossword(newCrossword);
-  console.log(testCommand);
-  // const grid = buildAnswerGrid(cw);
-  return stripAnswers(newCrossword);
+  const confirmedCrossword = await registerCrossword(proposedCrossword);
+  return confirmedCrossword.id;
 };
-
-export const testCWviaAirtable = await generateAndRegister();
-console.log("new crossword (if created) is:", testCWviaAirtable);
