@@ -16,3 +16,8 @@ Types
 
 - Wired up server, answer-checking functions
 - Mounted to Netlify/Render
+
+### 30-31 July
+
+- Moved source of truth for clues and generated crosswords to Airtable
+- Backend support for multiple crosswords
