@@ -17,8 +17,8 @@ export const ShowResults = ({ evaluation }: { evaluation: Results }) => {
       </p>
       <button
         onClick={() => window.open('https://airtable.com/appKt0Zoe7tx4IWk9/pagVcorRDWGpxiUeK/form', '_blank')}
-        className={`${primaryButton} ${wrongWords >= submissionThreshold ? 'opacity-50 cursor-not-allowed' : ''}`}
-        disabled={wrongWords >= submissionThreshold}
+        className={`${primaryButton} ${correctWords < submissionThreshold ? 'opacity-50 cursor-not-allowed' : ''}`}
+        disabled={correctWords < submissionThreshold}
       >
         Add Your Own Clues
       </button>
