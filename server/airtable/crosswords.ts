@@ -75,17 +75,17 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
         typedClue.tiles.push({
           row: typedClue.rowStart,
           col: typedClue.colStart + i,
-          letter: "",
+          letter: typedClue.answer[i],
         });
       } else {
         typedClue.tiles.push({
           row: typedClue.rowStart + i,
           col: typedClue.colStart,
-          letter: "",
+          letter: typedClue.answer[i],
         });
       }
     }
-    console.log("typedClue:", typedClue);
+    console.log("typedClue hint:", typedClue.hint);
     typedClues.push(typedClue);
   }
 

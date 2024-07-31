@@ -45,21 +45,26 @@ export const getResults = (
   correctAnswer: Crossword,
   guesses: AlphaGrid
 ): Results => {
-  console.log("getResults called with", guesses);
-
+  console.log("getResults called with guesses:", guesses);
+  console.log("correctAnswer.clues:", correctAnswer.clues);
+  console.log("END OF GUESSES");
   let correctWords = 0;
   let wrongWords = 0;
   let correctLetters = 0;
   let wrongLetters = 0;
 
   for (const clue of correctAnswer.clues) {
-    console.log("clue is", clue);
     let fullWordCorrect = true;
     for (const tile of clue.tiles) {
-      console.log("tile is", tile);
-      if (
-        tile.letter.toUpperCase() === guesses[tile.row][tile.col].toUpperCase()
-      ) {
+      if (tile.letter === "") {
+        // Skip black tiles
+        continue;
+      }
+      const guess = guesses[tile.row][tile.col];
+      if (guess === "") {
+        // Empty guess is considered incorrect
+        fullWordCorrect = false;
+      } else if (tile.letter.toUpperCase() === guess.toUpperCase()) {
         correctLetters++;
       } else {
         wrongLetters++;
