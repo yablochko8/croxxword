@@ -1,6 +1,11 @@
 ## Next Steps
 
-Types
+1. Backspace support
+1. Arrow navigation
+1. Auth
+1. Leaderboard
+1. Embedded clue submission
+1. Automated (cron) crossword generation
 
 ## Devlog
 
