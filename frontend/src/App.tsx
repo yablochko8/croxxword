@@ -20,8 +20,6 @@ function App() {
     <>
       <div className="min-h-screen">
 
-        <div>Welcome {playerId}</div>
-
         <div>Crossword # {crosswordId}</div>
 
         <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} showResults={!!results} />
