@@ -1,4 +1,5 @@
 import "./App.css";
+import { LogoExplainer } from "./components/LogoExplainer";
 import { ShowCrossword } from "./components/ShowCW";
 import { ShowResults } from "./components/ShowResults";
 import { useController } from "./services/useController";
@@ -20,9 +21,8 @@ function App() {
     <>
       <div className="min-h-screen">
 
+        <LogoExplainer />
         <div>Crossword # {crosswordId}</div>
-        <div className="text-sm text-green-600 m-2">All clues by real humans. If you solve it, you can add your clues to future crosswords.</div>
-
         <ShowCrossword gridDisplay={gridDisplay} clues={clues} onInput={changeLetter} showResults={!!results} />
 
 
