@@ -22,9 +22,15 @@ export const ShowResults = ({ evaluation }: { evaluation: Results }) => {
       >
         Add Your Own Clues
       </button>
-      <p className="text-sm text-red-500">
-        Get at least {submissionThreshold} answers correct to submit a clue for the next crossword!
-      </p>
+      {correctWords < submissionThreshold ? (
+        <p className="text-sm text-red-500">
+          Get at least {submissionThreshold} answers correct to submit a clue for the next crossword!
+        </p>
+      ) : (
+        <p className="text-sm text-green-500">
+          You've done it! You can be contribute clues to a future crossword because you got over {submissionThreshold} answers correct.
+        </p>
+      )}
     </div>
   );
 };
