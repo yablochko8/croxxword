@@ -12,7 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Zod schema that describes crosswords as they will be send to the Frontend
+////////////////////////////////////////////////////////////
+// Zod schema for stripped crosswords, for use in the FE
+////////////////////////////////////////////////////////////
+
 const StrippedTileSchema = z.object({
   row: z.number(),
   col: z.number(),
@@ -38,6 +41,10 @@ const StrippedCrosswordSchema = z.object({
   clues: z.array(StrippedClueSchema),
   withAnswers: z.boolean().transform(() => false),
 });
+
+////////////////////////////////////////////////////////////
+// SERVER ENDPOINTS
+////////////////////////////////////////////////////////////
 
 app.get("/", async (req, res) => {
   console.log("GET endpoint called.");

@@ -1,4 +1,4 @@
-import { AlphaGrid, FutureClue, Clue, Crossword } from "../../shared/types";
+import { AlphaGrid, Clue, Crossword } from "../../shared/types";
 import { getUnusedClues } from "../airtable/clues";
 import { registerCrossword } from "../airtable/crosswords";
 import { alphaGridGenerator } from "./gridGenerator";
@@ -261,18 +261,6 @@ const tryAddAnswerToGrid = (
     }
   }
   return answerGrid;
-};
-
-// export const testBECW = await generateNewCW();
-
-// export const testNewGrid = buildAnswerGrid(testBECW);
-
-const printGridToConsole = (grid: AlphaGrid | null) => {
-  if (grid) {
-    for (const row of grid) {
-      console.log(row);
-    }
-  }
 };
 
 /**

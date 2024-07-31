@@ -7,7 +7,6 @@ const crosswordTable = "crosswords";
 
 export const getCrosswordIds = async (): Promise<number[]> => {
   const sortParam = "sort%5B0%5D%5Bfield%5D=id&sort%5B0%5D%5Bdirection%5D=desc";
-
   const response = await fetch(
     `${rootPath}/${baseId}/${crosswordTable}?${sortParam}`,
     {
@@ -18,12 +17,8 @@ export const getCrosswordIds = async (): Promise<number[]> => {
       },
     }
   );
-
   const json = await response.json();
-  console.log("getCrosswordIds called, response from AirTable:", json);
-
   const ids = json.records.map((record: any) => record.fields.id);
-
   return ids;
 };
 
@@ -57,7 +52,7 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
       id: rawClue.id,
       hint: rawClue.fields.hint,
       answer: rawClue.fields.answer,
-      author: rawClue.fields.authorName, // TODO... fix this discrepancy
+      author: rawClue.fields.authorName, // TODO... fix this naming discrepancy
       isRow: rawClue.fields.isRow === "true",
       rowStart: rawClue.fields.rowStart,
       colStart: rawClue.fields.colStart,
@@ -88,7 +83,6 @@ export const getCrosswordFromDB = async (id: number): Promise<Crossword> => {
     console.log("typedClue hint:", typedClue.hint);
     typedClues.push(typedClue);
   }
-
   return {
     id: id,
     clues: typedClues,
@@ -149,6 +143,3 @@ export const registerCrossword = async (
   };
   return confirmedCrossword;
 };
-
-// const test = await getCrossword(100);
-// console.log("returned ids:", test);

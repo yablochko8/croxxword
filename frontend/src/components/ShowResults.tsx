@@ -34,5 +34,3 @@ export const ShowResults = ({ evaluation }: { evaluation: Results }) => {
     </div>
   );
 };
-
-// return `${evaluation.correctWords} correct words, ${evaluation.wrongWords} wrong words, ${evaluation.correctLetters} correct letters, ${evaluation.wrongLetters} wrong letters`;

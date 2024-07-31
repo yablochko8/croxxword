@@ -3,6 +3,11 @@ import { rootPath, baseId, AIRTABLE_TOKEN } from "./config";
 
 export const cluesTable = "clues"; // tblexSgyLsH7s5378
 
+/**
+ * Add a new clue to the clues table on Airtable.
+ * This job is currently done by an Airtable form, but this function
+ * will be part of a replacement for that eventually.
+ */
 const addClue = async (
   clue: string,
   answer: string,
@@ -30,6 +35,9 @@ const addClue = async (
   console.log("addClue called, response from AirTable:", json);
 };
 
+/*
+ * Adds placement details to Clue entry in AT. Used during the registration process.
+ */
 export const addPlacementToClue = async (
   clueId: string,
   isRow: boolean,
@@ -76,7 +84,7 @@ export const getUnusedClues = async (): Promise<FutureClue[]> => {
   );
 
   const json = await response.json();
-  console.log("getClues called, response from AirTable:", json);
+  console.log("getUnusedClues called, response from AirTable:", json);
   return json.records.map((record: any) => ({
     id: record.id,
     hint: record.fields.hint,
@@ -101,7 +109,7 @@ export const getAllClues = async (): Promise<FutureClue[]> => {
   );
 
   const json = await response.json();
-  console.log("getClues called, response from AirTable:", json);
+  console.log("getAllClues called, response from AirTable:", json);
   return json.records.map((record: any) => ({
     id: record.id,
     hint: record.fields.hint,
@@ -109,7 +117,3 @@ export const getAllClues = async (): Promise<FutureClue[]> => {
     author: record.fields.authorName,
   }));
 };
-
-// // addClue("test", "this", "endpoint");
-const test = await getUnusedClues();
-console.log(test);
