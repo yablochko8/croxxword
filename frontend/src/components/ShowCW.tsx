@@ -90,19 +90,20 @@ export const ShowCrossword = ({
             : blankCell;
 
         return (
-            <div className={tileStyle} >
+            <div className={`${tileStyle} overflow-hidden focus:bg-yellow-300 hover:bg-yellow-500`} style={{ width: '40px', height: '40px' }}>
                 {isInteractive ? (
                     <input
                         type="text"
                         maxLength={1}
-                        className={`w-full h-full text-center ${tileColor} focus:bg-yellow-300 hover:bg-yellow-100 cursor-pointer`}
+                        className={`w-full h-full text-center transform -rotate-45 ${tileColor}  cursor-pointer border-none outline-none`}
+                        style={{ borderRadius: '0' }}
                         defaultValue={gridDisplay.guesses[rowNum][colNum]}
                         onChange={handleInputChange}
                         onClick={() => setActiveTile({ row: rowNum, col: colNum })}
                         ref={inputRef}
                     />
                 ) : (
-                    <div />
+                    <div className="w-full h-full transform -rotate-45" />
                 )}
             </div>
         );
@@ -115,18 +116,20 @@ export const ShowCrossword = ({
     const CrossWordGrid = ({ boolGrid }: { boolGrid: BoolGrid }): JSX.Element => {
         return (
             <div className="flex flex-row justify-center">
-                <div className={flexCol} >
-                    {boolGrid.map((row, rowNum) => (
-                        <div key={rowNum} className={flexRow}>
-                            {row.map((cell, colNum) => (
-                                <Tile isInteractive={cell} rowNum={rowNum} colNum={colNum} key={`${rowNum}-${colNum}`} />
-                            ))}
-                        </div>
-                    ))}
+                <div className="grid gap-[1px] w-[300px] h-[300px] rotate-45 origin-center" style={{
+                    gridTemplateColumns: `repeat(${boolGrid[0].length}, 1fr)`
+                }}>
+                    {boolGrid.map((row, rowNum) =>
+                        row.map((cell, colNum) => (
+                            <div key={`${rowNum}-${colNum}`} className="border border-black w-full h-full flex justify-center items-center">
+                                <Tile isInteractive={cell} rowNum={rowNum} colNum={colNum} />
+                            </div>
+                        ))
+                    )}
                 </div>
-
             </div>
         );
+
     };
 
     /**
@@ -174,7 +177,11 @@ export const ShowCrossword = ({
     };
 
     return (<>
-        <CrossWordGrid boolGrid={gridDisplay.tiles} />
-        <ClueColumn clues={clues} />
+        <div className="flex flex-row">
+            <CrossWordGrid boolGrid={gridDisplay.tiles} />
+        </div>
+        <div className="flex flex-row">
+            <ClueColumn clues={clues} />
+        </div>
     </>)
 };
