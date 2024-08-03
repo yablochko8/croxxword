@@ -20,7 +20,7 @@ export const useController = (crosswordId: number, playerId: string) => {
     };
 
     fetchCrossword();
-  }, []);
+  }, [crosswordId]);
   const [results, setResults] = useState<Results | null>(null);
 
   /**
