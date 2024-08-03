@@ -275,3 +275,6 @@ export const generateAndRegister = async () => {
   const confirmedCrossword = await registerCrossword(proposedCrossword);
   return confirmedCrossword.id;
 };
+
+const test = await generateAndRegister();
+console.log(test);
