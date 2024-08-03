@@ -28,7 +28,7 @@ export const ShowResults = ({ evaluation }: { evaluation: Results }) => {
         </p>
       ) : (
         <p className="text-sm text-green-500">
-          You've done it! You can be contribute clues to a future crossword because you got over {submissionThreshold} answers correct.
+          You've done it! You can contribute clues to a future crossword because you got over {submissionThreshold} answers correct.
         </p>
       )}
     </div>
